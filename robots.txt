@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://becomingyoufitness.github.io/sitemap.xml

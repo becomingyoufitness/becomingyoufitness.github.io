@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BECOMING YOU ✦ FITNESS</title>
+<meta name="description" content="Personal fitness coaching for beginners and people restarting: structured training, sustainable habits, accountability and honest expectations. Start with a free Fitness Clarity Call.">
+<meta property="og:title" content="BECOMING YOU ✦ FITNESS">
+<meta property="og:description" content="Start with a conversation. Get clarity on your next step. Build from there.">
+<meta property="og:image" content="https://becomingyoufitness.github.io/media/gym-pose.jpg">
+<meta property="og:url" content="https://becomingyoufitness.github.io/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://becomingyoufitness.github.io/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230c0c0d'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23c9a87a'%3E✦%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0c0d; --bg-2:#141416; --bg-3:#1c1c1f; --line:#2a2a2e;
+  --text:#f2efe9; --muted:#a8a29a; --dim:#76716b;
+  --accent:#c9a87a; --accent-ink:#17130d;
+  --ok:#8fb894; --err:#e08a7a;
+  --r:4px; --max:1240px;
+  --s1:.5rem; --s2:1rem; --s3:1.5rem; --s4:2.5rem; --s5:4rem; --s6:7rem;
+  --display:"Archivo",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font:400 1rem/1.65 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{width:min(100% - 2.5rem,var(--max));margin-inline:auto}
+.display{font-family:var(--display);font-stretch:72%;font-weight:850;text-transform:uppercase;line-height:.92;letter-spacing:-.01em}
+.h1{font-size:clamp(2.9rem,8.4vw,7.2rem)}
+.h2{font-size:clamp(2.3rem,5.6vw,4.6rem)}
+.h3{font-size:clamp(1.5rem,2.6vw,2rem)}
+.eyebrow{font:600 .72rem/1 var(--body);letter-spacing:.22em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.7rem;margin-bottom:var(--s3)}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--accent)}
+.lead{font-size:clamp(1.05rem,1.6vw,1.25rem);color:var(--muted);max-width:60ch}
+.muted{color:var(--muted)} .dim{color:var(--dim)}
+.star{color:var(--accent);font-style:normal}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:52px;padding:0 1.6rem;border-radius:var(--r);font:600 .82rem/1 var(--body);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .25s ease,background .25s ease,border-color .25s ease,color .25s ease}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{background:#d8bb92;transform:translateY(-2px)}
+.btn-ghost{border-color:rgba(242,239,233,.35);color:var(--text);background:rgba(12,12,13,.25);backdrop-filter:blur(6px)}
+.btn-ghost:hover{border-color:var(--text)}
+.btn .arr{transition:transform .25s}.btn:hover .arr{transform:translateX(4px)}
+.btn-row{display:flex;flex-wrap:wrap;gap:.8rem}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(12,12,13,.86);backdrop-filter:blur(14px);border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:74px;gap:1rem}
+.logo{font-family:var(--display);font-stretch:80%;font-weight:800;letter-spacing:.08em;text-decoration:none;font-size:1.05rem;white-space:nowrap}
+.logo small{display:block;font:500 .6rem/1 var(--body);letter-spacing:.32em;color:var(--muted);margin-top:3px}
+.links{display:flex;align-items:center;gap:1.7rem;list-style:none}
+.links a{text-decoration:none;font-size:.86rem;color:var(--muted);transition:color .2s}
+.links a:hover,.links a[aria-current=page]{color:var(--text)}
+.nav .btn{min-height:42px;padding:0 1.1rem;font-size:.72rem}
+.burger{display:none;background:none;border:0;color:var(--text);width:44px;height:44px;cursor:pointer}
+.burger span{display:block;width:22px;height:1.5px;background:currentColor;margin:5px auto;transition:.3s}
+@media (max-width:960px){
+  .links{position:fixed;inset:74px 0 0;flex-direction:column;align-items:flex-start;gap:0;background:var(--bg);padding:1.5rem 1.25rem;transform:translateX(100%);transition:transform .35s ease;visibility:hidden}
+  .links.open{transform:none;visibility:visible}
+  .links li{width:100%;border-bottom:1px solid var(--line)}
+  .links a{display:block;padding:1.1rem 0;font-family:var(--display);font-stretch:75%;font-weight:800;font-size:1.7rem;text-transform:uppercase;color:var(--text)}
+  .links .btn{display:none}
+  .burger{display:block}
+  .burger[aria-expanded=true] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .burger[aria-expanded=true] span:nth-child(2){opacity:0}
+  .burger[aria-expanded=true] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+}
+
+/* sections */
+section{padding:var(--s6) 0;position:relative}
+.sec-tight{padding:var(--s5) 0}
+.alt{background:var(--bg-2)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5);align-items:center}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+@media (max-width:860px){.grid-2{grid-template-columns:1fr;gap:var(--s4)}.grid-3{grid-template-columns:1fr}}
+.cell{background:var(--bg);padding:var(--s4) var(--s3)}
+.alt .cell{background:var(--bg-2)}
+.num{font-family:var(--display);font-stretch:70%;font-weight:800;font-size:.95rem;color:var(--accent);letter-spacing:.1em}
+
+/* hero */
+.hero{min-height:100svh;display:flex;align-items:flex-end;padding:120px 0 var(--s5);overflow:hidden}
+.hero-media{position:absolute;inset:0;z-index:0}
+.hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,12,13,.55) 0%,rgba(12,12,13,.15) 35%,rgba(12,12,13,.7) 72%,var(--bg) 100%),linear-gradient(90deg,rgba(12,12,13,.75),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .h1{max-width:13ch;margin-bottom:var(--s3)}
+.hero .h1 .soft{color:var(--muted)}
+.hero .lead{color:#d6d1c9;margin-bottom:var(--s4)}
+.hero-meta{display:flex;gap:2.2rem;flex-wrap:wrap;margin-top:var(--s5);padding-top:var(--s3);border-top:1px solid rgba(242,239,233,.15);font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+.hero-meta b{display:block;color:var(--text);font-family:var(--display);font-stretch:75%;font-weight:800;font-size:1.35rem;letter-spacing:.02em;text-transform:uppercase}
+
+/* media frames */
+.frame{position:relative;overflow:hidden;border-radius:var(--r);background:var(--bg-3)}
+.frame img,.frame video{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.frame:hover img{transform:scale(1.03)}
+.tag{position:absolute;left:12px;bottom:12px;font:500 .68rem/1 var(--body);letter-spacing:.12em;text-transform:uppercase;background:rgba(12,12,13,.72);backdrop-filter:blur(6px);padding:.55rem .7rem;border-radius:2px;color:#d9d4cc}
+.tall{aspect-ratio:4/5}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:var(--s4)}
+.gallery .frame:nth-child(1){grid-column:span 5;aspect-ratio:4/5}
+.gallery .frame:nth-child(2){grid-column:span 4;aspect-ratio:3/4}
+.gallery .frame:nth-child(3){grid-column:span 3;aspect-ratio:3/4.6}
+.gallery .frame:nth-child(4){grid-column:span 4;aspect-ratio:3/4}
+.gallery .frame:nth-child(5){grid-column:span 4;aspect-ratio:3/4}
+.gallery .frame:nth-child(6){grid-column:span 4;aspect-ratio:3/4}
+@media (max-width:860px){.gallery{grid-template-columns:1fr 1fr}.gallery .frame{grid-column:auto!important;aspect-ratio:3/4!important}}
+
+/* video band */
+.vband{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:var(--s5);align-items:center}
+.vband .frame{aspect-ratio:9/16;max-height:82vh;margin-inline:auto;width:100%;max-width:440px}
+.vctl{position:absolute;right:12px;bottom:12px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(242,239,233,.4);background:rgba(12,12,13,.6);color:var(--text);cursor:pointer;font-size:.9rem}
+@media (max-width:860px){.vband{grid-template-columns:1fr}}
+
+/* lists / steps */
+.steps{list-style:none;counter-reset:s;border-top:1px solid var(--line)}
+.steps li{counter-increment:s;display:grid;grid-template-columns:80px 1fr;gap:1rem;padding:var(--s3) 0;border-bottom:1px solid var(--line)}
+.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--display);font-stretch:70%;font-weight:800;font-size:1.6rem;color:var(--accent)}
+.steps h4{font-family:var(--display);font-stretch:78%;font-weight:800;font-size:1.3rem;text-transform:uppercase;letter-spacing:.02em;margin-bottom:.25rem}
+.checks{list-style:none;display:grid;gap:.85rem}
+.checks li{padding-left:1.8rem;position:relative;color:#d6d1c9}
+.checks li::before{content:"✦";position:absolute;left:0;color:var(--accent);font-size:.8rem;top:.2rem}
+.checks.no li::before{content:"—";color:var(--dim)}
+.quote{font-family:var(--display);font-stretch:75%;font-weight:700;font-size:clamp(1.8rem,4vw,3.2rem);line-height:1.05;text-transform:uppercase;max-width:22ch}
+.note{border:1px dashed #4a4540;border-radius:var(--r);padding:var(--s2) var(--s3);font-size:.88rem;color:var(--muted);background:rgba(201,168,122,.04)}
+.note strong{color:var(--accent);font-weight:600;letter-spacing:.06em;font-size:.72rem;text-transform:uppercase;display:block;margin-bottom:.25rem}
+.ph{background:rgba(201,168,122,.12);border:1px dashed var(--accent);color:var(--accent);padding:0 .35rem;border-radius:2px;font-size:.92em;white-space:nowrap}
+
+/* faq */
+details{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:1.35rem 2.5rem 1.35rem 0;position:relative;font-weight:600;font-size:1.05rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:.2rem;top:1.05rem;font-size:1.5rem;font-weight:300;color:var(--accent);transition:transform .3s}
+details[open] summary::after{transform:rotate(45deg)}
+details .ans{padding:0 0 1.5rem;color:var(--muted);max-width:70ch}
+details .ans p+p{margin-top:.7rem}
+
+/* forms */
+form{display:grid;gap:1.15rem}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1.15rem}
+@media (max-width:640px){.row2{grid-template-columns:1fr}}
+label{display:block;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem}
+label .opt{text-transform:none;letter-spacing:0;font-weight:400;color:var(--dim)}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);color:var(--text);font:400 1rem/1.4 var(--body);padding:.9rem 1rem;min-height:52px;transition:border-color .2s}
+textarea{min-height:120px;resize:vertical}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:2.5rem}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
+.invalid{border-color:var(--err)!important}
+.err{color:var(--err);font-size:.82rem;margin-top:.35rem;display:none}
+.field.bad .err{display:block}
+.consent{display:flex;gap:.8rem;align-items:flex-start;font-size:.88rem;color:var(--muted)}
+.consent input{width:20px;height:20px;min-height:0;margin-top:.2rem;accent-color:var(--accent);flex:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.panel{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:clamp(1.25rem,4vw,2.5rem)}
+.result{display:none;border-radius:var(--r);padding:var(--s3);margin-top:var(--s2)}
+.result.show{display:block}
+.result.ok{border:1px solid rgba(143,184,148,.4);background:rgba(143,184,148,.06)}
+.result pre{white-space:pre-wrap;font:400 .85rem/1.55 ui-monospace,Menlo,monospace;background:var(--bg);border:1px solid var(--line);padding:1rem;border-radius:var(--r);margin:.9rem 0;max-height:260px;overflow:auto;color:#d6d1c9}
+
+/* starter */
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.day{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:var(--s3);display:flex;flex-direction:column;gap:.7rem}
+.day .k{font:600 .7rem/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.day h4{font-family:var(--display);font-stretch:76%;font-weight:800;font-size:1.45rem;text-transform:uppercase;line-height:1}
+.day ul{list-style:none;font-size:.92rem;color:var(--muted);display:grid;gap:.35rem}
+.day ul li::before{content:"· ";color:var(--accent)}
+.tracker{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+.tracker table{width:100%;border-collapse:collapse;min-width:620px;font-size:.9rem}
+.tracker th,.tracker td{padding:.8rem .6rem;border-bottom:1px solid var(--line);text-align:center}
+.tracker th:first-child,.tracker td:first-child{text-align:left;padding-left:1rem;color:#d6d1c9}
+.tracker th{font:600 .7rem/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:var(--bg-2)}
+.tracker input{width:22px;height:22px;min-height:0;accent-color:var(--accent);cursor:pointer}
+.ex{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.ex div{background:var(--bg);padding:var(--s3)}
+.ex b{display:block;font-family:var(--display);font-stretch:78%;font-size:1.15rem;text-transform:uppercase;margin-bottom:.3rem}
+.ex p{font-size:.9rem;color:var(--muted)}
+
+/* page system */
+.page{display:none}
+.page.active{display:block;animation:fade .5s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page-head{padding:calc(74px + var(--s5)) 0 var(--s4)}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:var(--s5) 0 calc(var(--s4) + 70px);font-size:.88rem;color:var(--muted)}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:var(--s4)}
+.fgrid ul{list-style:none;display:grid;gap:.5rem}
+.fgrid a{text-decoration:none}.fgrid a:hover{color:var(--text)}
+@media (max-width:760px){.fgrid{grid-template-columns:1fr}}
+.disclaimer{margin-top:var(--s4);padding-top:var(--s3);border-top:1px solid var(--line);font-size:.78rem;color:var(--dim);max-width:90ch}
+
+/* mobile sticky CTA */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));background:rgba(12,12,13,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:none;transform:translateY(100%);transition:transform .35s}
+.sticky.show{transform:none}
+.sticky .btn{width:100%}
+@media (max-width:860px){.sticky{display:block}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a href="#main" class="hp" style="position:absolute;left:-9999px">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#home" aria-label="Becoming You Fitness, home">BECOMING YOU <i class="star">✦</i><small>FITNESS</small></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+    <ul class="links" id="menu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#coaching">Coaching</a></li>
+      <li><a href="#starter">Free Starter</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#book">Book a call</a></li>
+      <li><a class="btn btn-primary" href="#book">Free Clarity Call</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HOME ================= -->
+<div class="page" id="p-home" data-title="BECOMING YOU ✦ FITNESS">
+
+  <section class="hero" aria-label="Introduction">
+    <div class="hero-media">
+      <video id="heroVid" autoplay muted loop playsinline preload="metadata" poster="media/clip1-poster.jpg" aria-hidden="true">
+        <source src="media/clip1.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="wrap">
+      <p class="eyebrow">Who are you becoming?</p>
+      <h1 class="display h1">Build your body. Build your standards. <span class="soft">Become who you said you would be.</span></h1>
+      <p class="lead">Personal fitness coaching built around structured training, sustainable habits, accountability, and real progress.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#book">Book your free Fitness Clarity Call <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#approach" data-scroll>Discover the approach</a>
+      </div>
+      <div class="hero-meta">
+        <div><b>7 years</b>of my own training</div>
+        <div><b>Beginners</b>&amp; people restarting</div>
+        <div><b>20 min</b>free call, no obligation</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-tight" aria-labelledby="intro-h">
+    <div class="wrap grid-2">
+      <div class="frame tall reveal">
+        <picture><source srcset="media/gym-pose.webp" type="image/webp"><img src="media/gym-pose.jpg" alt="George, the founder, standing in the gym" loading="lazy" style="object-position:center 25%"></picture>
+        <span class="tag">George · Founder</span>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">The person behind it</p>
+        <h2 class="display h2" id="intro-h">A real person. A real journey.</h2>
+        <p class="lead" style="margin:1.5rem 0">I’ve been training for about seven years: periods of real progress, setbacks, inconsistency and restarting. I know what it feels like to build muscle, and I know what it feels like to lose momentum.</p>
+        <p class="muted" style="margin-bottom:1.5rem">I’m building my knowledge, applying what I learn, and documenting the process honestly. I believe people deserve realistic expectations, structured support, and a fitness approach they can sustain.</p>
+        <div class="note" style="margin-bottom:1.5rem"><strong>Transparency</strong>I don’t currently hold a formal fitness certification. What I offer is grounded in my own training experience and ongoing learning, and I’m clear about what’s inside and outside my scope.</div>
+        <a class="btn btn-ghost" href="#about">Read my story <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="approach" aria-labelledby="ph-h">
+    <div class="wrap">
+      <p class="eyebrow">The approach</p>
+      <h2 class="display h2 reveal" id="ph-h" style="max-width:16ch;margin-bottom:var(--s4)">Your life is the game. You are the character.</h2>
+      <div class="grid-3 reveal">
+        <div class="cell"><p class="num">01 — STRUCTURE</p><h3 class="display h3" style="margin:.8rem 0">Your plan should be clear.</h3><p class="muted">You know what to do each session, why you’re doing it, and what comes next. No guesswork, no random workouts.</p></div>
+        <div class="cell"><p class="num">02 — CONSISTENCY</p><h3 class="display h3" style="margin:.8rem 0">Your progress should be real.</h3><p class="muted">Small, repeatable actions beat short bursts of motivation. We track what you actually do and build from there.</p></div>
+        <div class="cell"><p class="num">03 — STANDARDS</p><h3 class="display h3" style="margin:.8rem 0">Your standards should grow.</h3><p class="muted">Fitness first, with discipline and confidence following naturally once you prove to yourself you can show up.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="vid-h">
+    <div class="wrap vband">
+      <div class="frame reveal">
+        <video id="trainVid" muted loop playsinline preload="none" poster="media/clip2-poster.jpg" aria-label="George training in the gym">
+          <source src="media/clip2.mp4" type="video/mp4">
+        </video>
+        <button class="vctl" id="vctl" aria-label="Pause video">❚❚</button>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">How it works</p>
+        <h2 class="display h2" id="vid-h" style="margin-bottom:var(--s4)">Start with a conversation.</h2>
+        <ol class="steps">
+          <li><div><h4>Free Fitness Clarity Call</h4><p class="muted">20 minutes. Your goals, your background, your obstacles. No obligation.</p></div></li>
+          <li><div><h4>Get clarity on your next step</h4><p class="muted">Realistic next steps, and an honest view on whether coaching is right for you.</p></div></li>
+          <li><div><h4>Build from there</h4><p class="muted">If it’s a fit, an optional coaching proposal with structured training and regular check-ins.</p></div></li>
+        </ol>
+        <div class="btn-row" style="margin-top:var(--s4)"><a class="btn btn-primary" href="#book">Book your free call <span class="arr">→</span></a><a class="btn btn-ghost" href="#coaching">The full process</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" aria-labelledby="for-h">
+    <div class="wrap grid-2" style="align-items:start">
+      <div class="reveal">
+        <p class="eyebrow">Who it’s for</p>
+        <h2 class="display h2" id="for-h" style="margin-bottom:var(--s4)">Built for starting, and starting again.</h2>
+        <ul class="checks">
+          <li>Complete beginners who don’t know where to start</li>
+          <li>People who’ve trained before and fell off</li>
+          <li>Anyone tired of starting strong and stopping after two weeks</li>
+          <li>People who want structure and someone to be accountable to</li>
+          <li>Anyone who values honesty over hype</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">What you can work toward</p>
+        <ul class="checks" style="margin-bottom:var(--s4)">
+          <li>A training routine you can actually keep</li>
+          <li>Getting stronger, session by session</li>
+          <li>Understanding the exercises you’re doing</li>
+          <li>Habits around walking, sleep and recovery</li>
+          <li>Confidence in the gym</li>
+        </ul>
+        <p class="eyebrow" style="color:var(--dim)">Probably not the right fit if you need</p>
+        <ul class="checks no">
+          <li>Medical, injury rehab or clinical nutrition support (please see a qualified professional)</li>
+          <li>Competition prep or elite sport programming</li>
+          <li>A guaranteed result by a set date</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="gal-h">
+    <div class="wrap">
+      <div class="grid-2" style="align-items:end">
+        <div><p class="eyebrow">Seven years, unfiltered</p><h2 class="display h2" id="gal-h">The years in between.</h2></div>
+        <p class="muted">These are photos of me, taken across my own training. Not clients, not stock models, and not a promise of what anyone else will achieve. Just proof that the person behind this brand trains.</p>
+      </div>
+      <div class="gallery">
+        <div class="frame reveal"><picture><source srcset="media/side-pose.webp" type="image/webp"><img src="media/side-pose.jpg" alt="George, side profile in a gym changing room" loading="lazy"></picture></div>
+        <div class="frame reveal"><picture><source srcset="media/mirror-back.webp" type="image/webp"><img src="media/mirror-back.jpg" alt="Black and white photo of George's back in a gym mirror" loading="lazy"></picture></div>
+        <div class="frame reveal"><picture><source srcset="media/beach.webp" type="image/webp"><img src="media/beach.jpg" alt="Younger George at the beach" loading="lazy" style="object-position:70% center"></picture><span class="tag">Earlier years</span></div>
+        <div class="frame reveal"><picture><source srcset="media/home-mirror.webp" type="image/webp"><img src="media/home-mirror.jpg" alt="George after a home workout" loading="lazy"></picture></div>
+        <div class="frame reveal"><picture><source srcset="media/dark-mirror.webp" type="image/webp"><img src="media/dark-mirror.jpg" alt="George, gym mirror selfie in low light" loading="lazy"></picture></div>
+        <div class="frame reveal"><picture><source srcset="media/shirt-mirror.webp" type="image/webp"><img src="media/shirt-mirror.jpg" alt="George in the gym between sets" loading="lazy" style="object-position:center 20%"></picture></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" aria-labelledby="free-h">
+    <div class="wrap grid-2">
+      <div class="reveal">
+        <p class="eyebrow">Free resource</p>
+        <h2 class="display h2" id="free-h">The 7-Day Fitness Consistency Starter.</h2>
+        <p class="lead" style="margin:1.5rem 0 2rem">Three beginner bodyweight sessions, walking and recovery days, a habit tracker and a weekly reflection. Completely free, no email required, no purchase needed.</p>
+        <a class="btn btn-primary" href="#starter">Open the starter <span class="arr">→</span></a>
+      </div>
+      <div class="days reveal" style="grid-template-columns:1fr 1fr">
+        <div class="day"><span class="k">Day 1</span><h4>Full body A</h4></div>
+        <div class="day"><span class="k">Day 2</span><h4>Walk + mobility</h4></div>
+        <div class="day"><span class="k">Day 3</span><h4>Full body B</h4></div>
+        <div class="day"><span class="k">Day 7</span><h4>Reflect + plan</h4></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="hfaq-h">
+    <div class="wrap grid-2" style="align-items:start">
+      <div><p class="eyebrow">Questions</p><h2 class="display h2" id="hfaq-h">Straight answers.</h2><a class="btn btn-ghost" href="#faq" style="margin-top:2rem">All FAQs <span class="arr">→</span></a></div>
+      <div id="faqPreview"></div>
+    </div>
+  </section>
+
+  <section class="sec-tight">
+    <div class="wrap">
+      <div class="panel" style="text-align:center;padding:clamp(2.5rem,7vw,5rem) 1.5rem">
+        <p class="eyebrow" style="justify-content:center">Your next step</p>
+        <p class="quote" style="margin:0 auto 1.5rem">Start with a conversation. Get clarity on your next step. Build from there.</p>
+        <a class="btn btn-primary" href="#book">Book your free Fitness Clarity Call <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= ABOUT ================= -->
+<div class="page" id="p-about" data-title="About · BECOMING YOU ✦ FITNESS">
+  <div class="page-head"><div class="wrap"><p class="eyebrow">About</p><h1 class="display h1" style="max-width:12ch">No pretending. Just the process.</h1></div></div>
+  <section style="padding-top:0">
+    <div class="wrap grid-2" style="align-items:start">
+      <div class="frame tall" style="position:sticky;top:100px">
+        <picture><source srcset="media/side-pose.webp" type="image/webp"><img src="media/side-pose.jpg" alt="George, founder of Becoming You Fitness"></picture>
+        <span class="tag">Husza György (George) · Sighișoara, Romania</span>
+      </div>
+      <div>
+        <h2 class="display h3" style="margin-bottom:1rem">My fitness journey</h2>
+        <p class="muted" style="margin-bottom:1rem">I’ve been training for roughly seven years. Not seven perfect years: seven years of progress, setbacks, inconsistent stretches and restarting. I’ve built muscle and I know what real progress feels like. I also know how easy it is to lose it when life gets busy.</p>
+        <h2 class="display h3" style="margin:2.5rem 0 1rem">What inconsistency taught me</h2>
+        <p class="muted" style="margin-bottom:1rem">Most people don’t fail because they lack information. They fail because the plan doesn’t fit their life, nobody notices when they stop, and every restart feels like starting from zero. Structure and accountability matter more than the perfect programme.</p>
+        <h2 class="display h3" style="margin:2.5rem 0 1rem">Why I started BECOMING YOU</h2>
+        <p class="muted" style="margin-bottom:1rem">After years of doing this for myself, I want to help others too, especially people at the start, or people starting again. I don’t believe in pretending to have everything figured out. I believe in learning, applying, measuring, improving, and being honest about the process.</p>
+        <h2 class="display h3" style="margin:2.5rem 0 1rem">What I believe about fitness</h2>
+        <ul class="checks" style="margin-bottom:1rem">
+          <li>A plan you’ll follow beats a perfect plan you won’t.</li>
+          <li>Progress is measured, not guessed.</li>
+          <li>Restarting is a skill, not a failure.</li>
+          <li>Honest expectations build more trust than big promises.</li>
+        </ul>
+        <h2 class="display h3" style="margin:2.5rem 0 1rem">Current learning &amp; qualifications</h2>
+        <p class="muted" style="margin-bottom:1rem">I’m currently learning and building practical experience. I do not hold a formal fitness certification, and I’m not a medical professional, physiotherapist or dietitian.</p>
+        <p class="muted" style="margin-bottom:1rem">When I complete a course or certification, it will be listed here with the date and a way to verify it.</p>
+        <h2 class="display h3" style="margin:2.5rem 0 1rem">My commitment</h2>
+        <p class="muted">I’ll tell you what I know, what I don’t, and when something is outside my scope. I’ll show up for check-ins, and I’ll expect you to show up too.</p>
+        <div class="btn-row" style="margin-top:2.5rem"><a class="btn btn-primary" href="#book">Book a free call <span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= COACHING ================= -->
+<div class="page" id="p-coaching" data-title="Coaching · BECOMING YOU ✦ FITNESS">
+  <div class="page-head"><div class="wrap"><p class="eyebrow">Coaching</p><h1 class="display h1" style="max-width:13ch">Structured. Honest. Built around you.</h1><p class="lead" style="margin-top:1.5rem">Coaching is optional and only offered after a free call, and only if it’s genuinely a good fit.</p></div></div>
+  <section style="padding-top:var(--s3)">
+    <div class="wrap grid-2" style="align-items:start">
+      <div>
+        <p class="eyebrow">The process</p>
+        <ol class="steps">
+          <li><div><h4>Discovery call</h4><p class="muted">A free 20-minute Fitness Clarity Call.</p></div></li>
+          <li><div><h4>Goal &amp; lifestyle assessment</h4><p class="muted">Schedule, experience, equipment, what’s gotten in the way before.</p></div></li>
+          <li><div><h4>Initial plan proposal</h4><p class="muted">A clear written proposal: what’s included, what isn’t, and the cost. You decide, no pressure.</p></div></li>
+          <li><div><h4>Onboarding</h4><p class="muted">Starting point, check-in rhythm, how we communicate.</p></div></li>
+          <li><div><h4>Training &amp; habits</h4><p class="muted">Sessions and habits you can realistically keep.</p></div></li>
+          <li><div><h4>Progress tracking</h4><p class="muted">Sessions completed, strength, consistency, and how you feel.</p></div></li>
+          <li><div><h4>Review &amp; adjust</h4><p class="muted">Regular reviews. What’s working stays; what isn’t changes.</p></div></li>
+        </ol>
+      </div>
+      <div>
+        <div class="frame" style="aspect-ratio:4/5;margin-bottom:var(--s3)">
+          <picture><source srcset="media/shirt-mirror.webp" type="image/webp"><img src="media/shirt-mirror.jpg" alt="George in the gym" loading="lazy" style="object-position:center 15%"></picture>
+        </div>
+        <p class="eyebrow">What coaching can include</p>
+        <ul class="checks" style="margin-bottom:var(--s3)">
+          <li>Structured workout plans</li>
+          <li>Exercise guidance within my competence</li>
+          <li>Training progression</li>
+          <li>Habit and consistency tracking</li>
+          <li>General, non-clinical nutrition education</li>
+          <li>Progress reviews and accountability</li>
+          <li>Communication and support between check-ins</li>
+        </ul>
+        <div class="note" style="margin-bottom:var(--s3)"><strong>Scope</strong>Exactly what’s included is confirmed in your written proposal. Not every component is part of every plan.</div>
+        <div class="panel">
+          <p class="eyebrow">Investment</p>
+          <p class="display h3" style="margin-bottom:.6rem">Shared after your call.</p>
+          <p class="muted" style="font-size:.92rem">Pricing depends on the scope we agree. You’ll get it in writing before deciding anything.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= STARTER ================= -->
+<div class="page" id="p-starter" data-title="Free 7-Day Starter · BECOMING YOU ✦ FITNESS">
+  <div class="page-head"><div class="wrap"><p class="eyebrow">Free resource · no sign-up required</p><h1 class="display h1" style="max-width:14ch">The 7-Day Fitness Consistency Starter.</h1><p class="lead" style="margin-top:1.5rem">One week to prove to yourself you can show up. This won’t transform your body in seven days, and nothing honest will. It builds the habit that makes everything after it possible.</p></div></div>
+  <section style="padding-top:var(--s3)">
+    <div class="wrap">
+      <div class="note" style="margin-bottom:var(--s4)"><strong>Before you start</strong>This is general educational information, not medical advice. If you have an injury, a health condition, or haven’t exercised in a long time, check with a doctor first. Stop any exercise that causes pain.</div>
+
+      <h2 class="display h3" style="margin-bottom:var(--s3)">Your week</h2>
+      <div class="days" style="margin-bottom:var(--s5)">
+        <div class="day"><span class="k">Day 1 · Training</span><h4>Full body A</h4><ul><li>Bodyweight squat: 3 × 8–12</li><li>Incline push-up (hands on a bench/table): 3 × 6–10</li><li>Glute bridge: 3 × 10–15</li><li>Dead bug: 3 × 6 each side</li><li>Rest 60–90 s between sets</li></ul></div>
+        <div class="day"><span class="k">Day 2 · Active recovery</span><h4>Walk + mobility</h4><ul><li>20–30 min easy walk</li><li>5 min gentle mobility: hips, shoulders, upper back</li></ul></div>
+        <div class="day"><span class="k">Day 3 · Training</span><h4>Full body B</h4><ul><li>Reverse lunge: 3 × 6–8 each leg</li><li>Floor or incline push-up: 3 × as many good reps as you can, leaving 2 in reserve</li><li>Table or doorframe row: 3 × 8–12</li><li>Plank: 3 × 20–30 s</li></ul></div>
+        <div class="day"><span class="k">Day 4 · Rest</span><h4>Walk only</h4><ul><li>20–30 min walk</li><li>Prioritise sleep tonight</li></ul></div>
+        <div class="day"><span class="k">Day 5 · Training</span><h4>Full body A (again)</h4><ul><li>Repeat Day 1</li><li>Try one more rep on one exercise than last time, with clean form</li></ul></div>
+        <div class="day"><span class="k">Day 6 · Active recovery</span><h4>Longer walk</h4><ul><li>30–45 min walk, ideally outside</li><li>Optional 5 min mobility</li></ul></div>
+        <div class="day"><span class="k">Day 7 · Reflect</span><h4>Review + plan week 2</h4><ul><li>Fill in the reflection below</li><li>Schedule next week’s three sessions in your calendar</li></ul></div>
+      </div>
+
+      <h2 class="display h3" style="margin-bottom:var(--s3)">Exercise basics</h2>
+      <div class="ex" style="margin-bottom:var(--s5)">
+        <div><b>Bodyweight squat</b><p>Feet about shoulder-width, sit hips back and down, chest proud, knees tracking over toes. Stand up through the whole foot.</p></div>
+        <div><b>Incline push-up</b><p>Hands on a stable surface, body in a straight line. Lower your chest toward the edge, then press away. Lower surface = harder.</p></div>
+        <div><b>Glute bridge</b><p>Lie on your back, knees bent. Drive through heels, squeeze glutes to lift hips, pause, lower slowly.</p></div>
+        <div><b>Dead bug</b><p>On your back, arms up, knees at 90°. Lower opposite arm and leg slowly while keeping your lower back gently pressed down.</p></div>
+        <div><b>Reverse lunge</b><p>Step one foot back, lower until both knees are bent, push through the front foot to return. Hold a wall for balance if needed.</p></div>
+        <div><b>Table / doorframe row</b><p>Hold a sturdy table edge or doorframe, lean back with a straight body, pull your chest toward your hands. Only use something that can’t move.</p></div>
+        <div><b>Plank</b><p>Forearms under shoulders, body straight from head to heels, ribs down, glutes squeezed. Quality over time.</p></div>
+      </div>
+
+      <h2 class="display h3" style="margin-bottom:.6rem">Habit tracker</h2>
+      <p class="muted" style="margin-bottom:var(--s3);font-size:.92rem">Tick it off as you go. It’s saved in this browser only, if your browser allows.</p>
+      <div class="tracker" style="margin-bottom:var(--s5)"><table id="tracker"><thead><tr><th scope="col">Habit</th><th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th><th>D6</th><th>D7</th></tr></thead><tbody></tbody></table></div>
+
+      <div class="grid-2" style="align-items:start">
+        <div>
+          <h2 class="display h3" style="margin-bottom:var(--s3)">Weekly reflection</h2>
+          <ol class="steps">
+            <li><div><h4>What did I complete?</h4><p class="muted">Count sessions and walks. Be honest, not harsh.</p></div></li>
+            <li><div><h4>What got in the way?</h4><p class="muted">Time, energy, plans, mood? Name it specifically.</p></div></li>
+            <li><div><h4>What made it easier?</h4><p class="muted">Time of day, clothes ready, a friend? Keep that.</p></div></li>
+            <li><div><h4>One change for week 2</h4><p class="muted">Just one. Small and specific.</p></div></li>
+          </ol>
+        </div>
+        <div>
+          <h2 class="display h3" style="margin-bottom:var(--s3)">After the seven days</h2>
+          <p class="muted" style="margin-bottom:1rem"><strong style="color:var(--text)">Progressive improvement</strong> means doing slightly more over time: one more rep, a slower lowering phase, a harder push-up variation, a few extra minutes of walking. Small and steady beats big and short-lived.</p>
+          <ul class="checks" style="margin-bottom:var(--s4)">
+            <li>Repeat the week, aiming to beat a few numbers</li>
+            <li>When 12 reps feels easy, choose a harder variation</li>
+            <li>Keep the three sessions on the same days each week</li>
+            <li>Missed a day? Do the next one. Don’t restart the week.</li>
+          </ul>
+          <div class="panel">
+            <p class="display h3" style="margin-bottom:.6rem">Want help with week 2 and beyond?</p>
+            <p class="muted" style="margin-bottom:1.25rem;font-size:.95rem">Book a free 20-minute Fitness Clarity Call. No obligation to buy anything.</p>
+            <a class="btn btn-primary" href="#book">Book your free call <span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= FAQ ================= -->
+<div class="page" id="p-faq" data-title="FAQ · BECOMING YOU ✦ FITNESS">
+  <div class="page-head"><div class="wrap"><p class="eyebrow">FAQ</p><h1 class="display h1">Straight answers.</h1></div></div>
+  <section style="padding-top:0"><div class="wrap" style="max-width:860px" id="faqAll"></div></section>
+</div>
+
+<!-- ================= BOOK ================= -->
+<div class="page" id="p-book" data-title="Book a Free Call · BECOMING YOU ✦ FITNESS">
+  <div class="page-head"><div class="wrap"><p class="eyebrow">Free Fitness Clarity Call · 20 minutes</p><h1 class="display h1" style="max-width:12ch">Let’s find your starting point.</h1><p class="lead" style="margin-top:1.5rem">Tell me where you are, where you want to go, and what has been getting in your way. We’ll discuss whether coaching is the right next step.</p></div></div>
+  <section style="padding-top:var(--s3)">
+    <div class="wrap grid-2" style="align-items:start">
+      <div>
+        <div class="frame" style="aspect-ratio:4/5;margin-bottom:var(--s4)">
+          <picture><source srcset="media/home-mirror.webp" type="image/webp"><img src="media/home-mirror.jpg" alt="George after a workout" loading="lazy"></picture>
+        </div>
+        <p class="eyebrow">On the call we’ll</p>
+        <ul class="checks" style="margin-bottom:var(--s3)">
+          <li>Understand your goals</li><li>Talk through your training history</li><li>Look at your lifestyle and constraints</li><li>Identify your biggest obstacle</li><li>Agree on realistic next steps</li><li>Decide honestly whether coaching is a fit</li>
+        </ul>
+        <div class="note"><strong>Free. No obligation.</strong>The call costs nothing and you’re under no obligation to buy anything, during or after it.</div>
+      </div>
+      <div class="panel">
+        <form id="bookForm" novalidate>
+          <div class="row2">
+            <div class="field"><label for="b-name">Full name</label><input id="b-name" name="name" autocomplete="name" required><p class="err">Please enter your name.</p></div>
+            <div class="field"><label for="b-email">Email</label><input id="b-email" name="email" type="email" autocomplete="email" required><p class="err">Please enter a valid email.</p></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="b-level">Current fitness level</label><select id="b-level" name="level" required><option value="">Choose…</option><option>Complete beginner</option><option>Some experience, currently inactive</option><option>Training irregularly</option><option>Training consistently</option></select><p class="err">Please choose one.</p></div>
+            <div class="field"><label for="b-freq">Current training frequency</label><select id="b-freq" name="frequency" required><option value="">Choose…</option><option>Not training</option><option>1× per week</option><option>2–3× per week</option><option>4+× per week</option></select><p class="err">Please choose one.</p></div>
+          </div>
+          <div class="field"><label for="b-goal">Main goal</label><select id="b-goal" name="goal" required><option value="">Choose…</option><option>Build a consistent routine</option><option>Build muscle / strength</option><option>Lose body fat</option><option>Get fitter overall</option><option>Gain confidence in the gym</option><option>Other</option></select><p class="err">Please choose one.</p></div>
+          <div class="field"><label for="b-exp">Training experience</label><input id="b-exp" name="experience" placeholder="e.g. went to the gym for a year, stopped in 2024" required><p class="err">A short answer is fine.</p></div>
+          <div class="field"><label for="b-chal">Biggest challenge</label><textarea id="b-chal" name="challenge" placeholder="What’s been getting in your way?" required></textarea><p class="err">Tell me a little about it.</p></div>
+          <div class="row2">
+            <div class="field"><label for="b-contact">Preferred contact method</label><select id="b-contact" name="contact" required><option value="">Choose…</option><option>Email</option><option>Video call</option><option>WhatsApp</option><option>Instagram DM</option></select><p class="err">Please choose one.</p></div>
+            <div class="field"><label for="b-handle">Phone / handle <span class="opt">(if not email)</span></label><input id="b-handle" name="handle"></div>
+          </div>
+          <div class="field"><label for="b-more">Anything else? <span class="opt">(optional)</span></label><textarea id="b-more" name="more" style="min-height:90px"></textarea><p class="dim" style="font-size:.8rem;margin-top:.35rem">Please don’t share detailed medical information here.</p></div>
+          <div class="hp" aria-hidden="true"><label for="b-web">Website</label><input id="b-web" name="website" tabindex="-1" autocomplete="off"></div>
+          <div class="field"><label class="consent"><input type="checkbox" name="age" required> I confirm I’m 18 or older.</label><p class="err">You need to be 18+ to book.</p></div>
+          <div class="field"><label class="consent"><input type="checkbox" name="consent" required> I agree my details are used only to respond to this enquiry and arrange the call. I can ask for them to be deleted at any time.</label><p class="err">Please confirm to continue.</p></div>
+          <button class="btn btn-primary" type="submit">Request my free call <span class="arr">→</span></button>
+        </form>
+        <div class="result" id="bookResult" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= CONTACT ================= -->
+<div class="page" id="p-contact" data-title="Contact · BECOMING YOU ✦ FITNESS">
+  <div class="page-head"><div class="wrap"><p class="eyebrow">Contact</p><h1 class="display h1">Get in touch.</h1></div></div>
+  <section style="padding-top:0">
+    <div class="wrap grid-2" style="align-items:start">
+      <div>
+        <p class="lead" style="margin-bottom:var(--s4)">Questions before booking? Send a message. I reply to every message within 48 hours.</p>
+        <dl style="display:grid;gap:1.4rem">
+          <div><dt class="eyebrow" style="margin-bottom:.4rem">Email</dt><dd><a href="mailto:huszageorge25@gmail.com">huszageorge25@gmail.com</a></dd></div>
+          <div><dt class="eyebrow" style="margin-bottom:.4rem">Instagram</dt><dd><a href="https://www.instagram.com/george_husza24/" target="_blank" rel="noopener">@george_husza24</a></dd></div>
+          <div><dt class="eyebrow" style="margin-bottom:.4rem">Based in</dt><dd>Sighișoara, Romania · calls online</dd></div>
+        </dl>
+        <div class="note" style="margin-top:var(--s4)"><strong>Privacy</strong>Your details are used only to reply to you. They’re never sold or shared. Ask anytime and they’ll be deleted.</div>
+      </div>
+      <div class="panel">
+        <form id="contactForm" novalidate>
+          <div class="field"><label for="c-name">Name</label><input id="c-name" name="name" autocomplete="name" required><p class="err">Please enter your name.</p></div>
+          <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" autocomplete="email" required><p class="err">Please enter a valid email.</p></div>
+          <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required></textarea><p class="err">Please write a message.</p></div>
+          <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+          <div class="field"><label class="consent"><input type="checkbox" name="consent" required> I agree my details are used only to reply to this message.</label><p class="err">Please confirm to continue.</p></div>
+          <button class="btn btn-primary" type="submit">Send message <span class="arr">→</span></button>
+        </form>
+        <div class="result" id="contactResult" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div><a class="logo" href="#home">BECOMING YOU <i class="star">✦</i><small>FITNESS</small></a><p style="margin-top:1rem;max-width:40ch">Your progress should be real. Your plan should be clear. Your standards should grow.</p></div>
+      <ul><li><a href="#about">About</a></li><li><a href="#coaching">Coaching</a></li><li><a href="#starter">Free 7-Day Starter</a></li></ul>
+      <ul><li><a href="#faq">FAQ</a></li><li><a href="#book">Book a free call</a></li><li><a href="#contact">Contact</a></li><li><a href="https://www.instagram.com/george_husza24/" target="_blank" rel="noopener">Instagram ↗</a></li><li><a href="mailto:huszageorge25@gmail.com">huszageorge25@gmail.com</a></li></ul>
+    </div>
+    <p class="disclaimer">BECOMING YOU ✦ FITNESS provides general fitness coaching and education based on personal training experience. The founder is not a certified personal trainer, medical professional, physiotherapist or dietitian. Nothing on this site is medical advice. Photos show the founder’s own training and are not client results. Individual results vary. © <span id="yr"></span> BECOMING YOU ✦ FITNESS</p>
+  </div>
+</footer>
+
+<div class="sticky" id="sticky"><a class="btn btn-primary" href="#book">Book your free Fitness Clarity Call</a></div>
+
+<script>
+(function(){
+  // ---- FAQ data (editable) ----
+  var FAQ=[
+    ["Who is coaching for?","Beginners and people restarting their fitness journey: anyone who wants structure, accountability and honest guidance rather than hype."],
+    ["Do I need gym experience?","No. The free starter is bodyweight-only, and coaching starts from wherever you actually are."],
+    ["Can beginners apply?","Yes. Beginners are exactly who this is built for."],
+    ["How does the first call work?","It’s a 20-minute online call. We talk about your goals, background, lifestyle and what’s been getting in the way, then agree on realistic next steps."],
+    ["Is the first call free?","Yes, completely. There’s no obligation to buy anything, during or after the call."],
+    ["What happens after the call?","If coaching looks like a good fit, I may send you an optional written proposal with what’s included and the cost. If it isn’t a fit, I’ll tell you, and point you toward something that may help."],
+    ["Do you provide workout plans?","Structured workout plans can be part of coaching. Exactly what’s included is confirmed in your proposal."],
+    ["Do you provide nutrition guidance?","Only general, non-clinical nutrition education within my scope. I don’t write medical or clinical meal plans. For that, please see a registered dietitian or doctor."],
+    ["How is progress measured?","By what you can track: sessions completed, consistency, strength and reps, and how you feel. We agree the measures together at the start."],
+    ["What if I struggle with consistency?","That’s normal. It’s my own story too. We build a plan around your real schedule, track the basics, and adjust instead of restarting from zero."],
+    ["What qualifications and experience do you have?","I have around seven years of personal training experience. I’m currently learning and building practical coaching experience, and I don’t hold a formal fitness certification. I’ll update this when that changes."]
+  ];
+  function faqHTML(list){return list.map(function(q){return '<details><summary>'+q[0]+'</summary><div class="ans"><p>'+q[1]+'</p></div></details>'}).join('')}
+  document.getElementById('faqAll').innerHTML=faqHTML(FAQ);
+  document.getElementById('faqPreview').innerHTML=faqHTML([FAQ[4],FAQ[1],FAQ[10],FAQ[9]]);
+  document.getElementById('yr').textContent=new Date().getFullYear();
+
+  // ---- routing ----
+  var pages=['home','about','coaching','starter','faq','book','contact'];
+  var menu=document.getElementById('menu'),burger=document.getElementById('burger');
+  function closeMenu(){menu.classList.remove('open');burger.setAttribute('aria-expanded','false');document.body.style.overflow=''}
+  function route(){
+    var h=(location.hash||'#home').slice(1);
+    if(h==='approach'){show('home');var el=document.getElementById('approach');if(el)setTimeout(function(){el.scrollIntoView()},30);return}
+    show(pages.indexOf(h)>-1?h:'home');
+  }
+  function show(name){
+    pages.forEach(function(p){document.getElementById('p-'+p).classList.toggle('active',p===name)});
+    var pg=document.getElementById('p-'+name);document.title=pg.dataset.title;
+    document.querySelectorAll('.links a').forEach(function(a){a.toggleAttribute('aria-current',a.getAttribute('href')==='#'+name);if(a.hasAttribute('aria-current'))a.setAttribute('aria-current','page')});
+    closeMenu();window.scrollTo(0,0);observe();onScroll();
+    var hv=document.getElementById('heroVid');if(hv){if(name==='home'&&!reduce)hv.play().catch(function(){});else hv.pause()}
+  }
+  document.addEventListener('click',function(e){var a=e.target.closest('[data-scroll]');if(a){e.preventDefault();var t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:reduce?'auto':'smooth'})}});
+  burger.addEventListener('click',function(){var o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',o);document.body.style.overflow=o?'hidden':''});
+  window.addEventListener('hashchange',route);
+
+  // ---- motion ----
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){var hv=document.getElementById('heroVid');hv.removeAttribute('autoplay');hv.pause()}
+  var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{threshold:.12}):null;
+  function observe(){document.querySelectorAll('.page.active .reveal:not(.in)').forEach(function(el){io?io.observe(el):el.classList.add('in')})}
+
+  // training video: play when visible
+  var tv=document.getElementById('trainVid'),vc=document.getElementById('vctl'),userPaused=reduce;
+  if(reduce){vc.textContent='▶';vc.setAttribute('aria-label','Play video')}
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting&&!userPaused)tv.play().catch(function(){});else tv.pause()})},{threshold:.35}).observe(tv)}
+  vc.addEventListener('click',function(){if(tv.paused){userPaused=false;tv.play().catch(function(){});vc.textContent='❚❚';vc.setAttribute('aria-label','Pause video')}else{userPaused=true;tv.pause();vc.textContent='▶';vc.setAttribute('aria-label','Play video')}});
+
+  // nav + sticky
+  var nav=document.getElementById('nav'),sticky=document.getElementById('sticky');
+  function onScroll(){var y=window.scrollY;nav.classList.toggle('solid',y>40||!document.getElementById('p-home').classList.contains('active'));sticky.classList.toggle('show',y>500&&!document.getElementById('p-book').classList.contains('active'))}
+  window.addEventListener('scroll',onScroll,{passive:true});
+
+  // ---- habit tracker ----
+  var habits=['Training session or walk done','Walked 20+ minutes','Drank water through the day','In bed on time','Wrote one line about today'];
+  var KEY='by-tracker-v1',state={};try{state=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var tb=document.querySelector('#tracker tbody');
+  tb.innerHTML=habits.map(function(h,i){var c='<td>'+h+'</td>';for(var d=0;d<7;d++){var id='h'+i+'d'+d;c+='<td><input type="checkbox" data-k="'+id+'" aria-label="'+h+', day '+(d+1)+'"'+(state[id]?' checked':'')+'></td>'}return '<tr>'+c+'</tr>'}).join('');
+  tb.addEventListener('change',function(e){var k=e.target.dataset.k;if(!k)return;state[k]=e.target.checked;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(err){}});
+
+  // ---- forms ----
+  function validate(form){
+    var ok=true,first=null;
+    form.querySelectorAll('[required]').forEach(function(el){
+      var v=el.type==='checkbox'?el.checked:el.value.trim().length>0;
+      if(v&&el.type==='email')v=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(el.value.trim());
+      var f=el.closest('.field');if(f)f.classList.toggle('bad',!v);el.classList.toggle('invalid',!v);el.setAttribute('aria-invalid',!v);
+      if(!v){ok=false;if(!first)first=el}
+    });
+    if(first)first.focus();return ok;
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  // ---- CONFIG (edit here) ----
+  var CONFIG={
+    email:'huszageorge25@gmail.com',
+    instagram:'george_husza24',
+    calLink:'' // e.g. 'https://cal.com/your-name/clarity-call' — when set, visitors pick a time right after submitting
+  };
+  function links(subject,text){
+    var gm='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(CONFIG.email)+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent(text);
+    return '<div class="btn-row" style="margin-top:.4rem">'+
+      '<a class="btn btn-primary" href="'+gm+'" target="_blank" rel="noopener">Send by Gmail ↗</a>'+
+      '<a class="btn btn-ghost" href="https://ig.me/m/'+CONFIG.instagram+'" target="_blank" rel="noopener">Send on Instagram ↗</a>'+
+      '<button class="btn btn-ghost" type="button" data-copy>Copy details</button></div>'+
+      '<p class="dim" style="font-size:.82rem;margin-top:.8rem">Or email <b style="color:var(--text)">'+CONFIG.email+'</b> · Instagram <b style="color:var(--text)">@'+CONFIG.instagram+'</b></p>';
+  }
+  function calBtn(){return CONFIG.calLink?'<a class="btn btn-primary" style="margin-top:1rem" href="'+CONFIG.calLink+'" target="_blank" rel="noopener">Pick your call time ↗</a>':''}
+  function handle(formId,resId,subject,build,okHead,okBody){
+    var form=document.getElementById(formId),res=document.getElementById(resId),btn=form.querySelector('button[type=submit]'),label=btn.innerHTML,last=0;
+    form.addEventListener('input',function(e){var f=e.target.closest('.field');if(f&&f.classList.contains('bad')){f.classList.remove('bad');e.target.classList.remove('invalid')}});
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(form.website&&form.website.value)return; // spam trap
+      if(!validate(form))return;
+      if(Date.now()-last<15000){res.className='result show';res.innerHTML='<p class="muted">Already sent a moment ago, thank you. Give it a few seconds.</p>';return}
+      var d=new FormData(form),text=build(d);
+      btn.disabled=true;btn.innerHTML='Sending…';
+      var payload={_subject:subject+' — '+d.get('name'),_replyto:d.get('email'),_template:'table',_captcha:'false',_honey:'',name:d.get('name'),email:d.get('email'),details:text};
+      var ctrl=('AbortController' in window)?new AbortController():null;var t=setTimeout(function(){ctrl&&ctrl.abort()},12000);
+      fetch('https://formsubmit.co/ajax/'+CONFIG.email,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload),signal:ctrl?ctrl.signal:undefined})
+        .then(function(r){return r.json()}).then(function(j){
+          if(String(j.success)!=='true')throw new Error(j.message||'not delivered');
+          last=Date.now();form.reset();
+          res.className='result ok show';
+          res.innerHTML='<p class="display h3" style="margin-bottom:.4rem">'+okHead+'</p><p class="muted">'+okBody+'</p>'+calBtn();
+        }).catch(function(){
+          res.className='result ok show';
+          res.innerHTML='<p class="display h3" style="margin-bottom:.4rem">One last step.</p><p class="muted" style="font-size:.92rem">Your details are ready. Tap a button to send them to me. Nothing has been sent yet.</p><pre>'+esc(text)+'</pre>'+links(subject+' — '+d.get('name'),text);
+          var c=res.querySelector('[data-copy]');c.addEventListener('click',function(){navigator.clipboard.writeText(text).then(function(){c.textContent='Copied ✓'},function(){c.textContent='Select the text above to copy'})});
+        }).finally(function(){clearTimeout(t);btn.disabled=false;btn.innerHTML=label;res.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
+    });
+  }
+  handle('bookForm','bookResult','Free Fitness Clarity Call request',function(d){return 'Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nFitness level: '+d.get('level')+'\nTraining frequency: '+d.get('frequency')+'\nMain goal: '+d.get('goal')+'\nExperience: '+d.get('experience')+'\nBiggest challenge: '+d.get('challenge')+'\nPreferred contact: '+d.get('contact')+(d.get('handle')?' ('+d.get('handle')+')':'')+(d.get('more')?'\nMore: '+d.get('more'):'')+'\n18+: yes · Consent: yes'},
+    'Request received.', CONFIG.calLink?'Thank you. Pick a time below, and I’ll see you on the call.':'Thank you. I’ll reply within 48 hours with a few call times to choose from.');
+  handle('contactForm','contactResult','Website message',function(d){return 'From: '+d.get('name')+' <'+d.get('email')+'>\n\n'+d.get('message')},'Message sent.','Thank you. I’ll reply within 48 hours.');
+  route();
+})();
+</script>
+</body>
+</html>
