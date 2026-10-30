@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BECOMING YOU ✦ FITNESS — media</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100vw;height:100vh;overflow:hidden;background:#0c0c0d;color:#f2efe9;font-family:Inter,sans-serif}
+.d{font-family:Archivo,sans-serif;font-stretch:72%;font-weight:850;text-transform:uppercase;line-height:.92;letter-spacing:-.01em}
+.ey{font:600 1.4vh/1 Inter;letter-spacing:.32em;text-transform:uppercase;color:#c9a87a;display:flex;gap:1.2vh;align-items:center}
+.ey::before{content:"";width:5vh;height:1px;background:#c9a87a}
+.slide{position:absolute;inset:0;display:none}
+.slide.on{display:block}
+.bg{position:absolute;inset:0;background-size:cover;background-position:center 28%}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,12,13,.94) 0%,rgba(12,12,13,.7) 38%,rgba(12,12,13,.1) 70%),linear-gradient(0deg,rgba(12,12,13,.6),transparent 40%)}
+.copy{position:absolute;left:7vw;top:44%;transform:translateY(-50%);max-width:50vw}
+.copy h1{font-size:8.6vh;margin:2.6vh 0}
+.copy h1 span{color:#a8a29a}
+.copy p{font-size:2.3vh;line-height:1.5;color:#d6d1c9;max-width:40vw}
+.logo{position:absolute;left:7vw;bottom:6vh;font-family:Archivo;font-stretch:80%;font-weight:800;letter-spacing:.14em;font-size:2.2vh}
+.logo i{color:#c9a87a;font-style:normal}
+.pill{position:absolute;right:5vw;bottom:6vh;border:1px solid rgba(201,168,122,.6);color:#c9a87a;padding:1.4vh 2.4vh;font:600 1.5vh Inter;letter-spacing:.2em;text-transform:uppercase}
+/* gallery */
+.grid{position:absolute;inset:0;display:grid;grid-template-columns:1.1fr 1fr 1fr 1fr;gap:6px}
+.grid div{background-size:cover;background-position:center 30%}
+.grid .t{display:flex;flex-direction:column;justify-content:center;padding:0 3.5vw;background:#0c0c0d}
+.grid .t h2{font-size:7.4vh;margin:3vh 0}
+.grid .t p{font-size:2vh;color:#a8a29a;line-height:1.5}
+/* steps */
+.steps{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1.25fr}
+.steps .img{background-size:cover;background-position:center 25%}
+.steps .r{padding:8vh 5vw;display:flex;flex-direction:column;justify-content:center}
+.steps h2{font-size:7.6vh;margin:2.4vh 0 4vh}
+.steps ol{list-style:none;border-top:1px solid #2a2a2e}
+.steps li{display:grid;grid-template-columns:8vh 1fr;padding:2.1vh 0;border-bottom:1px solid #2a2a2e;align-items:center}
+.steps li b{font-family:Archivo;font-stretch:70%;font-weight:800;font-size:3vh;color:#c9a87a}
+.steps li span{font-family:Archivo;font-stretch:78%;font-weight:800;font-size:3vh;text-transform:uppercase}
+.steps li em{display:block;font:400 1.8vh/1.4 Inter;color:#a8a29a;text-transform:none;font-style:normal;margin-top:.4vh}
+</style>
+</head>
+<body>
+<div class="slide" id="s1">
+  <div class="bg" style="background-image:url(../media/gym-pose.jpg);background-position:70% 25%"></div><div class="shade"></div>
+  <div class="copy"><p class="ey" data-t="e1"></p><h1 class="d" data-t="h1"></h1><p data-t="p1"></p></div>
+  <div class="logo">BECOMING YOU <i>✦</i> FITNESS</div><div class="pill" data-t="pill"></div>
+</div>
+<div class="slide" id="s2">
+  <div class="grid">
+    <div class="t"><p class="ey" data-t="e2"></p><h2 class="d" data-t="h2"></h2><p data-t="p2"></p></div>
+    <div style="background-image:url(../media/side-pose.jpg)"></div>
+    <div style="background-image:url(../media/mirror-back.jpg)"></div>
+    <div style="background-image:url(../media/shirt-mirror.jpg);background-position:center 15%"></div>
+  </div>
+</div>
+<div class="slide" id="s3">
+  <div class="steps">
+    <div class="img" style="background-image:url(../media/home-mirror.jpg)"></div>
+    <div class="r"><p class="ey" data-t="e3"></p><h2 class="d" data-t="h3"></h2>
+      <ol><li><b>01</b><span data-t="a1"></span></li><li><b>02</b><span data-t="a2"></span></li><li><b>03</b><span data-t="a3"></span></li><li><b>04</b><span data-t="a4"></span></li></ol>
+    </div>
+  </div>
+</div>
+<script>
+var T={
+en:{e1:'Personal fitness coaching',h1:'Build your body. Build your standards. <span>Become who you said you would be.</span>',p1:'Structured training, sustainable habits, weekly accountability and honest coaching for beginners and people starting again.',pill:'Coaching · monthly',
+e2:'Seven years, unfiltered',h2:'A real person. A real journey.',p2:'Seven years of my own training: progress, setbacks and restarting. No stock models, no fake results.',
+e3:'How coaching works',h3:'Clear plan. Weekly check-ins. Real progress.',a1:'Your plan<em>Training built around your real week</em>',a2:'Weekly check-ins<em>A reply within 24 hours: one win, one fix, one focus</em>',a3:'Progress reviews<em>Re-test and adjust every 4 weeks</em>',a4:'Your workbook<em>Goals, habit tracker and reflections</em>'},
+ro:{e1:'Coaching de fitness personal',h1:'Construiește-ți corpul. Ridică-ți standardele. <span>Devino cine ai spus că vei fi.</span>',p1:'Antrenament structurat, obiceiuri sustenabile, responsabilitate săptămânală și coaching sincer pentru începători și pentru cei care o iau de la capăt.',pill:'Coaching · lunar',
+e2:'Șapte ani, nefiltrat',h2:'Un om real. Un drum real.',p2:'Șapte ani de antrenament propriu: progres, căderi și reluări. Fără modele de stoc, fără rezultate false.',
+e3:'Cum funcționează',h3:'Plan clar. Verificări săptămânale. Progres real.',a1:'Planul tău<em>Antrenament construit pe săptămâna ta reală</em>',a2:'Verificări săptămânale<em>Răspuns în 24 de ore: o reușită, o ajustare, un focus</em>',a3:'Evaluări de progres<em>Retestare și ajustare la fiecare 4 săptămâni</em>',a4:'Caietul tău<em>Obiective, tracker de obiceiuri și reflecții</em>'},
+hu:{e1:'Személyes fitness coaching',h1:'Építsd a tested. Emeld a mércéd. <span>Válj azzá, akivé lenni akartál.</span>',p1:'Strukturált edzés, fenntartható szokások, heti számonkérés és őszinte coaching kezdőknek és újrakezdőknek.',pill:'Coaching · havi',
+e2:'Hét év, filter nélkül',h2:'Egy valódi ember. Egy valódi út.',p2:'Hét év saját edzés: fejlődés, visszaesések és újrakezdések. Nincs stockfotó, nincs hamis eredmény.',
+e3:'Így működik',h3:'Világos terv. Heti visszajelzés. Valódi fejlődés.',a1:'A terved<em>Edzés a valódi heted köré építve</em>',a2:'Heti visszajelzés<em>Válasz 24 órán belül: egy siker, egy módosítás, egy fókusz</em>',a3:'Fejlődési áttekintés<em>Újramérés és módosítás 4 hetente</em>',a4:'A munkafüzeted<em>Célok, szokáskövető és visszatekintés</em>'}};
+var q=new URLSearchParams(location.search),l=T[q.get('l')]?q.get('l'):'en',s=q.get('s')||'1';
+document.documentElement.lang=l;
+document.querySelectorAll('[data-t]').forEach(function(e){e.innerHTML=T[l][e.dataset.t]});
+document.getElementById('s'+s).classList.add('on');
+</script>
+</body>
+</html>
