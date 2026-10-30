@@ -708,6 +708,7 @@ footer{border-top:1px solid var(--line);padding:var(--s5) 0 calc(var(--s4) + 70p
   var CONFIG={
     email:'huszageorge25@gmail.com',
     instagram:'george_husza24',
+    web3formsKey:'4b3bba17-d0dd-418e-a422-737b7860725c', // Web3Forms access key (primary sender)
     calLink:'' // e.g. 'https://cal.com/your-name/clarity-call' — when set, visitors pick a time right after submitting
   };
   function links(subject,text){
@@ -730,10 +731,11 @@ footer{border-top:1px solid var(--line);padding:var(--s5) 0 calc(var(--s4) + 70p
       var d=new FormData(form),text=build(d);
       btn.disabled=true;btn.innerHTML='Sending…';
       var payload={_subject:subject+' — '+d.get('name'),_replyto:d.get('email'),_template:'table',_captcha:'false',_honey:'',name:d.get('name'),email:d.get('email'),details:text};
-      var ctrl=('AbortController' in window)?new AbortController():null;var t=setTimeout(function(){ctrl&&ctrl.abort()},12000);
-      fetch('https://formsubmit.co/ajax/'+CONFIG.email,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload),signal:ctrl?ctrl.signal:undefined})
-        .then(function(r){return r.json()}).then(function(j){
-          if(String(j.success)!=='true')throw new Error(j.message||'not delivered');
+      function post(url,body){var ctrl=('AbortController' in window)?new AbortController():null;var t=setTimeout(function(){ctrl&&ctrl.abort()},12000);
+        return fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body),signal:ctrl?ctrl.signal:undefined}).then(function(r){clearTimeout(t);return r.json()}).then(function(j){if(String(j.success)!=='true')throw new Error(j.message||'not delivered');return j})}
+      var w3=CONFIG.web3formsKey?post('https://api.web3forms.com/submit',{access_key:CONFIG.web3formsKey,subject:payload._subject,from_name:'BECOMING YOU Website',replyto:d.get('email'),name:d.get('name'),email:d.get('email'),details:text,botcheck:''}):Promise.reject(new Error('no key'));
+      w3.catch(function(){return post('https://formsubmit.co/ajax/'+CONFIG.email,payload)})
+        .then(function(j){
           last=Date.now();form.reset();
           res.className='result ok show';
           res.innerHTML='<p class="display h3" style="margin-bottom:.4rem">'+okHead+'</p><p class="muted">'+okBody+'</p>'+calBtn();
@@ -741,7 +743,7 @@ footer{border-top:1px solid var(--line);padding:var(--s5) 0 calc(var(--s4) + 70p
           res.className='result ok show';
           res.innerHTML='<p class="display h3" style="margin-bottom:.4rem">One last step.</p><p class="muted" style="font-size:.92rem">Your details are ready. Tap a button to send them to me. Nothing has been sent yet.</p><pre>'+esc(text)+'</pre>'+links(subject+' — '+d.get('name'),text);
           var c=res.querySelector('[data-copy]');c.addEventListener('click',function(){navigator.clipboard.writeText(text).then(function(){c.textContent='Copied ✓'},function(){c.textContent='Select the text above to copy'})});
-        }).finally(function(){clearTimeout(t);btn.disabled=false;btn.innerHTML=label;res.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
+        }).finally(function(){btn.disabled=false;btn.innerHTML=label;res.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
     });
   }
   handle('bookForm','bookResult','Free Fitness Clarity Call request',function(d){return 'Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nFitness level: '+d.get('level')+'\nTraining frequency: '+d.get('frequency')+'\nMain goal: '+d.get('goal')+'\nExperience: '+d.get('experience')+'\nBiggest challenge: '+d.get('challenge')+'\nPreferred contact: '+d.get('contact')+(d.get('handle')?' ('+d.get('handle')+')':'')+(d.get('more')?'\nMore: '+d.get('more'):'')+'\n18+: yes · Consent: yes'},
