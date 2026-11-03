@@ -105,6 +105,24 @@ input.in:focus,select.in:focus{border-color:var(--acc);outline:none}
 .toast{position:fixed;top:calc(14px + var(--safe-t));left:50%;transform:translateX(-50%) translateY(-200%);opacity:0;pointer-events:none;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:99px;font-weight:600;font-size:.85rem;transition:transform .3s;z-index:50}
 .toast.on{transform:translateX(-50%) translateY(0);opacity:1}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.mbar{display:flex;height:6px;border-radius:6px;overflow:hidden;background:var(--bg3);margin-top:14px}
+.mbar i{display:block;height:100%}
+.mleg{display:flex;gap:12px;flex-wrap:wrap;font-size:.72rem;color:var(--muted);margin-top:8px}
+.mleg b{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.mstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mstats div{background:var(--bg3);border-radius:12px;padding:10px 6px;text-align:center}
+.mstats b{display:block;font-size:1.1rem}
+.mstats span{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.steps{padding-left:20px;display:grid;gap:10px;color:#ddd4c6;font-size:.92rem;line-height:1.5}
+.steps li::marker{color:var(--acc);font-weight:700}
+.dayrow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:12px}
+.dayrow button{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:8px 0;color:var(--text);font-weight:700;cursor:pointer}
+.dayrow button small{display:block;font-size:.62rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.dayrow button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:var(--ink)}
+.dayrow button[aria-pressed=true] small{color:var(--ink)}
+.ck .box{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--line);display:grid;place-items:center;flex:none;font-size:.8rem}
+.ck[aria-pressed=true] .box{background:var(--acc);border-color:var(--acc);color:var(--ink)}
+details summary::-webkit-details-marker{color:var(--acc)}
 </style>
 </head>
 <body>
@@ -164,20 +182,136 @@ var DAYS={
 };
 var SCHED={2:[1,4],3:[1,3,5],4:[1,2,4,5],5:[1,2,3,5,6]}; // 0=Sun
 var HABITS=[['train','Planned session or a 20-min walk'],['water','Water through the day'],['protein','Protein with each main meal'],['sleep','7+ hours of sleep'],['steps','7,000+ steps']];
-var MEALS=[
- ['Greek yogurt bowl','Breakfast','Greek yogurt, oats, berries, honey',420,32],
- ['Eggs on toast','Breakfast','3 eggs, 2 slices wholegrain toast, tomatoes',450,27],
- ['Overnight oats','Breakfast','Oats, milk, whey, banana',480,35],
- ['Chicken rice bowl','Lunch','Chicken breast, rice, peppers, salsa',600,48],
- ['Tuna wrap','Lunch','Tuna, wholegrain wrap, salad, light mayo',480,38],
- ['Lentil soup + bread','Lunch','Red lentils, carrots, onion, wholegrain bread',520,26],
- ['Salmon, potatoes, greens','Dinner','Salmon fillet, potatoes, broccoli',620,40],
- ['Turkey bolognese','Dinner','Lean turkey mince, pasta, tomato sauce',650,45],
- ['Beef stir-fry','Dinner','Lean beef, noodles, mixed vegetables',620,42],
- ['Chickpea curry','Dinner','Chickpeas, spinach, tomato, rice',580,22],
- ['Cottage cheese & fruit','Snack','Cottage cheese, pineapple',220,24],
- ['Protein shake & banana','Snack','Whey in milk, banana',320,30]
+/* =================== NUTRITION DATA =================== */
+// Ingredients per 100 g: [name, kcal, protein, carbs, fat, aisle, unit-hint]
+var ING={
+ oats:['Rolled oats',389,16.9,66,6.9,'Grains & bread'],
+ gyog:['Greek yogurt (0% fat)',59,10.3,3.6,0.4,'Dairy & eggs'],
+ milk:['Semi-skimmed milk',47,3.4,4.8,1.5,'Dairy & eggs'],
+ whey:['Whey protein',400,80,8,6,'Nuts, seeds & extras'],
+ banana:['Banana',89,1.1,23,0.3,'Fruit & veg',120,'banana'],
+ berry:['Mixed berries (fresh or frozen)',50,0.7,12,0.3,'Fruit & veg'],
+ honey:['Honey',304,0.3,82,0,'Cans & pantry'],
+ egg:['Eggs',143,12.6,0.7,9.5,'Dairy & eggs',50,'egg'],
+ ewhite:['Egg whites',52,10.9,0.7,0.2,'Dairy & eggs'],
+ bread:['Wholegrain bread',247,13,41,3.4,'Grains & bread',40,'slice'],
+ tomato:['Tomatoes',18,0.9,3.9,0.2,'Fruit & veg'],
+ chick:['Chicken breast',120,22.5,0,2.6,'Meat & fish'],
+ thigh:['Chicken thighs (skinless)',121,19.7,0,4.1,'Meat & fish'],
+ rice:['Rice (cooked)',130,2.7,28.2,0.3,'Grains & bread'],
+ pasta:['Pasta (cooked)',158,5.8,31,0.9,'Grains & bread'],
+ noodle:['Egg noodles (cooked)',138,4.5,25,2.1,'Grains & bread'],
+ cous:['Couscous (cooked)',112,3.8,23,0.2,'Grains & bread'],
+ quinoa:['Quinoa (cooked)',120,4.4,21.3,1.9,'Grains & bread'],
+ potato:['Potatoes',77,2,17,0.1,'Fruit & veg'],
+ swpot:['Sweet potatoes',86,1.6,20,0.1,'Fruit & veg'],
+ wrap:['Wholegrain tortilla wraps',290,9,48,7,'Grains & bread',60,'wrap'],
+ pita:['Wholemeal pita',266,9.8,55,2.6,'Grains & bread',70,'pita'],
+ rcake:['Rice cakes',387,8,81,3,'Grains & bread',9,'cake'],
+ pepper:['Bell peppers',26,1,6,0.3,'Fruit & veg'],
+ salsa:['Tomato salsa',36,1.5,7,0.2,'Cans & pantry'],
+ corn:['Sweetcorn',86,3.3,19,1.2,'Cans & pantry'],
+ tuna:['Tuna in water (drained)',116,25.5,0,0.8,'Cans & pantry'],
+ mayo:['Light mayonnaise',280,0.9,8,27,'Cans & pantry'],
+ salad:['Salad leaves',15,1.4,2.9,0.2,'Fruit & veg'],
+ lentil:['Lentils (cooked or canned)',116,9,20,0.4,'Cans & pantry'],
+ carrot:['Carrots',41,0.9,9.6,0.2,'Fruit & veg'],
+ onion:['Onions',40,1.1,9.3,0.1,'Fruit & veg'],
+ passata:['Tomato passata',30,1.4,5.5,0.2,'Cans & pantry'],
+ salmon:['Salmon fillets',208,20,0,13,'Meat & fish'],
+ cod:['Cod fillets',82,18,0,0.7,'Meat & fish'],
+ prawn:['Prawns (raw, peeled)',85,20,0,0.5,'Meat & fish'],
+ broc:['Broccoli',34,2.8,7,0.4,'Fruit & veg'],
+ turkey:['Turkey mince (5% fat)',130,21,0,5,'Meat & fish'],
+ tslice:['Sliced turkey breast',104,18,3,1.7,'Meat & fish'],
+ beef:['Lean beef mince (5% fat)',137,21,0,5.6,'Meat & fish'],
+ steak:['Lean steak (sirloin, trimmed)',150,22,0,6.5,'Meat & fish'],
+ stirveg:['Stir-fry vegetables',30,1.8,5,0.3,'Fruit & veg'],
+ soy:['Soy sauce (reduced salt)',53,8,4.9,0.6,'Cans & pantry'],
+ oil:['Olive oil',884,0,0,100,'Cans & pantry'],
+ chickpea:['Chickpeas (canned, drained)',139,7,22.5,2.6,'Cans & pantry'],
+ kidney:['Kidney beans (canned, drained)',127,8.7,22.8,0.5,'Cans & pantry'],
+ bean:['Black beans (canned, drained)',132,8.9,23.7,0.5,'Cans & pantry'],
+ spinach:['Spinach',23,2.9,3.6,0.4,'Fruit & veg'],
+ coco:['Light coconut milk',70,0.7,2,6.5,'Cans & pantry'],
+ cottage:['Cottage cheese (low fat)',81,10.5,4.8,2.3,'Dairy & eggs'],
+ pine:['Pineapple',50,0.5,13,0.1,'Fruit & veg'],
+ tofu:['Firm tofu',144,17,2.8,8.7,'Meat & fish'],
+ feta:['Feta',264,14,4,21,'Dairy & eggs'],
+ parm:['Parmesan',392,36,3.2,26,'Dairy & eggs'],
+ ched:['Cheddar',403,25,1.3,33,'Dairy & eggs'],
+ avo:['Avocado',160,2,8.5,14.7,'Fruit & veg'],
+ pb:['Peanut butter',588,25,20,50,'Nuts, seeds & extras'],
+ almond:['Almonds',579,21,22,50,'Nuts, seeds & extras'],
+ chia:['Chia seeds',486,16.5,42,30.7,'Nuts, seeds & extras'],
+ apple:['Apples',52,0.3,14,0.2,'Fruit & veg',180,'apple'],
+ hummus:['Hummus',166,7.9,14.3,9.6,'Dairy & eggs'],
+ cuc:['Cucumber',15,0.7,3.6,0.1,'Fruit & veg'],
+ gbean:['Green beans',31,1.8,7,0.1,'Fruit & veg'],
+ mush:['Mushrooms',22,3.1,3.3,0.3,'Fruit & veg'],
+ zuc:['Courgette (zucchini)',17,1.2,3.1,0.3,'Fruit & veg'],
+ edam:['Edamame (shelled)',121,11.9,8.9,5.2,'Fruit & veg'],
+ cocoa:['Cocoa powder',228,19.6,57.9,13.7,'Cans & pantry']
+};
+// Recipes: [name, category, minutes, tags, [[ingredient,grams],...], [steps], extra pantry items]
+// Tags: v = vegetarian, q = 15 min or less, mp = meal-prep friendly, b = budget
+var RECIPES=[
+ // ---------- BREAKFAST ----------
+ ['Berry protein oats','Breakfast',8,'v q b',[['oats',60],['milk',250],['whey',30],['berry',100]],['Microwave the oats and milk for 2–3 minutes, stirring halfway.','Let it cool for a minute, then stir in the whey with a splash of milk until smooth (stirring it in while boiling makes it clumpy).','Top with the berries.'],'Pinch of cinnamon'],
+ ['Greek yogurt power bowl','Breakfast',5,'v q',[['gyog',250],['oats',40],['berry',100],['almond',10],['honey',10]],['Spoon the yogurt into a bowl.','Top with the oats, berries and chopped almonds.','Finish with a drizzle of honey.'],''],
+ ['Make-ahead overnight oats','Breakfast',5,'v mp b',[['oats',60],['milk',200],['gyog',100],['whey',20],['chia',10],['banana',100]],['Mix the oats, milk, yogurt, whey and chia in a jar.','Cover and refrigerate overnight (keeps 3 days, so make several at once).','Slice the banana on top before eating.'],'Pinch of cinnamon'],
+ ['Eggs on toast with tomatoes','Breakfast',10,'v q b',[['egg',150],['bread',80],['tomato',120],['oil',5]],['Halve the tomatoes and fry them in the oil for 3–4 minutes.','Scramble or poach the eggs.','Serve on the toasted bread with the tomatoes.'],'Salt, pepper'],
+ ['Spinach & feta egg-white omelette','Breakfast',12,'v q',[['egg',100],['ewhite',150],['mush',80],['spinach',50],['feta',30],['bread',40]],['Fry the sliced mushrooms in a non-stick pan for 3 minutes, then wilt in the spinach.','Whisk the eggs and egg whites, pour over the veg and cook on medium until almost set.','Crumble the feta on top, fold and serve with toast.'],'Cooking spray, salt, pepper'],
+ ['Protein pancakes','Breakfast',15,'v q',[['oats',50],['banana',100],['egg',100],['ewhite',100],['whey',20],['gyog',100],['berry',80]],['Blend the oats, banana, eggs, egg whites and whey into a batter.','Cook small pancakes in a non-stick pan on medium heat, about 1–2 minutes per side.','Serve with the yogurt and berries.'],'Cooking spray, baking powder (optional)'],
+ ['Breakfast burrito','Breakfast',15,'mp',[['egg',100],['ewhite',100],['bean',60],['pepper',50],['ched',20],['salsa',40],['wrap',60]],['Fry the diced pepper for 3 minutes, then add the beans to warm through.','Add the whisked eggs and egg whites and scramble until just set.','Fill the wrap with the eggs, cheese and salsa and roll up. Wraps freeze well for up to a month.'],'Cooking spray, chilli flakes'],
+ ['Cottage cheese toast with berries','Breakfast',5,'v q b',[['bread',80],['cottage',150],['berry',80],['honey',8]],['Toast the bread.','Spread thickly with cottage cheese.','Top with berries and a drizzle of honey.'],''],
+ ['Turkey & egg breakfast sandwich','Breakfast',10,'q',[['bread',80],['egg',100],['tslice',50],['ched',15],['spinach',20]],['Fry or scramble the eggs in a non-stick pan.','Toast the bread, then layer spinach, turkey, egg and cheese.','Press together and eat warm.'],'Cooking spray, hot sauce'],
+ ['Peanut butter banana shake','Breakfast',3,'v q',[['milk',300],['whey',30],['banana',120],['oats',30],['pb',15]],['Add everything to a blender with a few ice cubes.','Blend for 30–60 seconds until smooth.'],'Ice'],
+ // ---------- LUNCH ----------
+ ['Chicken rice bowl','Lunch',20,'mp',[['chick',150],['rice',180],['pepper',100],['corn',50],['salsa',50],['oil',5]],['Season the chicken and cook in the oil for 6–7 minutes per side until cooked through.','Slice the chicken and peppers.','Build the bowl: rice, chicken, peppers, sweetcorn, salsa. Keeps 3 days in the fridge.'],'Paprika, garlic powder, salt'],
+ ['Crunchy tuna wrap','Lunch',5,'q b',[['tuna',120],['wrap',60],['mayo',15],['cuc',50],['corn',30],['salad',40]],['Mix the tuna, mayonnaise and sweetcorn.','Fill the wrap with salad, cucumber and the tuna mix.','Roll tightly and slice in half.'],'Black pepper, lemon'],
+ ['Red lentil & vegetable soup','Lunch',30,'v mp b',[['lentil',250],['carrot',80],['onion',60],['passata',100],['oil',5],['bread',80]],['Soften the chopped onion and carrot in the oil for 5 minutes.','Add the lentils, passata and about 400 ml stock. Simmer for 20 minutes.','Blend partly if you like it thick. Serve with the bread. Freezes well.'],'Vegetable stock cube, cumin, garlic'],
+ ['Greek chicken pita','Lunch',15,'q',[['pita',70],['chick',130],['gyog',60],['cuc',50],['tomato',60],['feta',20]],['Cook the chicken with oregano and lemon, then slice.','Grate a little cucumber into the yogurt with garlic and salt for a quick tzatziki.','Stuff the warmed pita with chicken, tomato, the rest of the cucumber, feta and tzatziki.'],'Oregano, lemon, garlic'],
+ ['Turkey chilli with rice','Lunch',30,'mp b',[['turkey',150],['kidney',100],['passata',150],['onion',60],['pepper',80],['rice',150]],['Brown the turkey mince with the chopped onion and pepper.','Add the beans, passata and spices, then simmer for 15–20 minutes.','Serve over rice. Makes a great batch for 3–4 days.'],'Chilli powder, cumin, smoked paprika, garlic'],
+ ['Chicken & tomato pasta salad','Lunch',15,'mp',[['pasta',150],['chick',120],['tomato',80],['spinach',30],['parm',10],['oil',8]],['Cook and cool the pasta.','Toss with the sliced cooked chicken, halved tomatoes, spinach and oil.','Finish with parmesan, salt and pepper. Good cold for 2 days.'],'Basil, balsamic vinegar'],
+ ['Teriyaki tofu bowl','Lunch',20,'v mp',[['tofu',180],['rice',160],['broc',100],['edam',50],['soy',15],['honey',8],['oil',5]],['Press the tofu dry, cube it and fry in the oil until golden.','Add the soy sauce and honey and let it bubble into a glaze.','Serve over rice with steamed broccoli and edamame.'],'Garlic, ginger, sesame seeds'],
+ ['Salmon poke bowl','Lunch',15,'q',[['salmon',120],['rice',160],['edam',50],['cuc',60],['avo',40],['soy',10]],['Bake or pan-fry the salmon for 10–12 minutes, then flake it.','Arrange the rice, salmon, edamame, cucumber and avocado in a bowl.','Drizzle with the soy sauce.'],'Sesame seeds, chilli, lime'],
+ ['Chickpea feta salad','Lunch',10,'v q b',[['chickpea',150],['cuc',80],['tomato',100],['feta',40],['salad',40],['pita',35],['oil',8]],['Chop the cucumber and tomatoes.','Toss with the chickpeas, salad leaves, oil and lemon juice.','Crumble the feta on top and serve with toasted pita.'],'Lemon, oregano, red onion'],
+ ['Beef burrito bowl','Lunch',20,'mp',[['beef',130],['rice',150],['bean',70],['corn',50],['salsa',50],['salad',30],['ched',15]],['Brown the beef mince with the spices.','Warm the beans and sweetcorn.','Build the bowl with rice, beef, beans, corn, salsa, salad and cheese.'],'Taco spices, lime'],
+ ['Veggie egg fried rice','Lunch',12,'v q b',[['rice',200],['egg',100],['ewhite',100],['stirveg',120],['edam',50],['soy',15],['oil',7]],['Stir-fry the vegetables and edamame in the oil for 3 minutes.','Push to the side, scramble the eggs and egg whites, then mix together.','Add the (ideally day-old) rice and soy sauce and fry until hot.'],'Garlic, spring onion'],
+ ['Turkey & hummus wrap','Lunch',5,'q',[['wrap',60],['tslice',100],['hummus',40],['salad',30],['pepper',60],['cuc',40]],['Spread the hummus over the wrap.','Layer the turkey, salad, sliced pepper and cucumber.','Roll tightly and slice.'],''],
+ // ---------- DINNER ----------
+ ['Salmon, potatoes & greens','Dinner',25,'',[['salmon',150],['potato',250],['broc',150],['oil',5]],['Boil the potatoes for 15 minutes.','Season the salmon and bake at 200 °C for 12–15 minutes.','Steam the broccoli for the last 4 minutes and drizzle everything with the oil.'],'Lemon, dill, salt, pepper'],
+ ['Turkey bolognese','Dinner',30,'mp b',[['turkey',150],['pasta',200],['passata',200],['onion',60],['carrot',60],['mush',80],['parm',10],['oil',5]],['Soften the chopped onion, carrot and mushrooms in the oil.','Add the turkey and brown it, then add the passata and simmer for 15 minutes.','Serve over pasta with parmesan. Sauce freezes well.'],'Garlic, Italian herbs, stock cube'],
+ ['Beef & veg stir-fry','Dinner',15,'q',[['steak',150],['noodle',180],['stirveg',200],['soy',20],['honey',8],['oil',7]],['Slice the steak thinly and sear in very hot oil for 2 minutes, then remove.','Stir-fry the vegetables for 3–4 minutes.','Add the noodles, beef, soy sauce and honey and toss until hot.'],'Garlic, ginger, chilli'],
+ ['Chickpea & spinach curry','Dinner',25,'v mp b',[['chickpea',200],['spinach',100],['passata',150],['coco',100],['onion',60],['rice',150],['gyog',50]],['Soften the onion with the curry paste or spices.','Add the chickpeas, passata and coconut milk and simmer for 15 minutes.','Stir in the spinach until wilted. Serve with rice and a spoon of yogurt.'],'Curry paste or garam masala, garlic, ginger'],
+ ['Lemon-garlic chicken traybake','Dinner',40,'mp',[['thigh',180],['potato',200],['pepper',100],['zuc',120],['oil',8]],['Heat the oven to 200 °C.','Toss the chicken, chopped potatoes, peppers and courgette with the oil, lemon, garlic and herbs.','Roast for 35 minutes until the chicken is cooked through and the potatoes are golden.'],'Lemon, garlic, rosemary'],
+ ['Cod with rice & green beans','Dinner',15,'q',[['cod',200],['rice',180],['gbean',150],['oil',8]],['Season the cod and pan-fry in the oil for 3–4 minutes per side.','Steam the green beans for 5 minutes.','Serve with the rice and a squeeze of lemon.'],'Lemon, paprika, salt'],
+ ['Chicken fajitas','Dinner',20,'',[['chick',160],['wrap',120],['pepper',150],['onion',60],['salsa',50],['gyog',50],['oil',5]],['Slice the chicken, peppers and onion and toss with fajita spices.','Fry in the oil for 8–10 minutes until the chicken is cooked.','Serve in the warm wraps with salsa and yogurt.'],'Fajita spices, lime'],
+ ['Burger & sweet potato wedges','Dinner',35,'',[['beef',150],['bread',60],['swpot',250],['salad',30],['tomato',50],['ched',20],['oil',5]],['Cut the sweet potato into wedges, toss in the oil and roast at 210 °C for 25–30 minutes.','Shape the beef into a patty and grill or fry for 4–5 minutes per side.','Serve in the bun with the cheese, salad and tomato.'],'Salt, pepper, mustard'],
+ ['Garlic prawn pasta','Dinner',15,'q',[['prawn',180],['pasta',200],['tomato',100],['spinach',50],['parm',10],['oil',10]],['Cook the pasta.','Fry the garlic in the oil for 30 seconds, add the prawns and cook for 3 minutes until pink.','Add the halved tomatoes, spinach and drained pasta, toss and finish with parmesan.'],'Garlic, chilli flakes, lemon'],
+ ['Peanut tofu noodles','Dinner',20,'v',[['tofu',180],['noodle',150],['stirveg',200],['pb',15],['soy',15]],['Fry the cubed tofu until golden, then remove.','Stir-fry the vegetables for 3 minutes.','Whisk the peanut butter, soy sauce and a splash of hot water, then toss everything with the noodles.'],'Lime, chilli, garlic'],
+ ['Turkey meatballs & couscous','Dinner',30,'mp',[['turkey',150],['cous',180],['passata',150],['zuc',100],['parm',10],['oil',5]],['Season the turkey and roll into small meatballs.','Brown them in the oil, add the passata and diced courgette and simmer for 15 minutes.','Serve over couscous with parmesan.'],'Garlic, Italian herbs'],
+ ['Steak, potatoes & salad','Dinner',25,'',[['steak',180],['potato',250],['salad',50],['tomato',80],['oil',8]],['Boil or roast the potatoes.','Season the steak and sear in a very hot pan for 2–4 minutes per side, then rest for 5 minutes.','Slice and serve with the potatoes and dressed salad.'],'Salt, pepper, garlic'],
+ ['Bean & egg shakshuka','Dinner',25,'v b',[['egg',150],['passata',250],['pepper',100],['onion',60],['bean',100],['feta',30],['bread',60],['oil',5]],['Soften the onion and pepper in the oil, then add the spices.','Add the passata and beans and simmer for 10 minutes.','Make wells, crack in the eggs, cover and cook until set. Top with feta and serve with bread.'],'Cumin, paprika, chilli, garlic'],
+ ['Chicken quinoa bowl','Dinner',25,'mp',[['chick',150],['quinoa',180],['pepper',100],['zuc',100],['hummus',30],['spinach',30],['oil',5]],['Roast the peppers and courgette in the oil at 200 °C for 20 minutes.','Cook the chicken and slice.','Build the bowl with quinoa, spinach, veg, chicken and a spoon of hummus.'],'Paprika, lemon'],
+ // ---------- SNACKS ----------
+ ['Cottage cheese & pineapple','Snack',2,'v q b',[['cottage',200],['pine',100]],['Spoon the cottage cheese into a bowl and top with the pineapple.'],''],
+ ['Protein shake & banana','Snack',2,'v q',[['whey',30],['milk',300],['banana',120]],['Shake the whey with the milk.','Have the banana on the side.'],''],
+ ['Greek yogurt & berries','Snack',2,'v q',[['gyog',200],['berry',80],['honey',5]],['Top the yogurt with berries and a little honey.'],''],
+ ['Apple & peanut butter','Snack',2,'v q b',[['apple',180],['pb',20]],['Slice the apple and dip in the peanut butter.'],''],
+ ['Turkey rice cakes','Snack',3,'q',[['rcake',27],['tslice',80],['cuc',40]],['Top the rice cakes with turkey and sliced cucumber.'],'Mustard, black pepper'],
+ ['Eggs, veg & hummus','Snack',10,'v b mp',[['egg',100],['cuc',80],['carrot',80],['hummus',30]],['Boil the eggs for 9 minutes, then cool in cold water. Boil a batch to last 4 days.','Cut the cucumber and carrots into sticks and dip in hummus.'],'Salt, pepper'],
+ ['Salted edamame','Snack',5,'v q',[['edam',150]],['Boil or microwave the edamame for 3–4 minutes.','Sprinkle with sea salt.'],'Sea salt, chilli flakes'],
+ ['Tuna rice cakes','Snack',3,'q b',[['tuna',100],['rcake',27],['mayo',10],['cuc',30]],['Mix the tuna with the mayonnaise and pepper.','Pile onto the rice cakes and top with cucumber.'],'Black pepper'],
+ ['Chocolate protein mug cake','Snack',3,'v q',[['oats',30],['whey',25],['ewhite',60],['milk',50],['cocoa',5],['berry',50]],['Mix the oats, whey, cocoa, egg whites and milk in a large mug.','Microwave for 60–90 seconds until just set.','Top with berries.'],'Baking powder (optional)'],
+ ['Yogurt & almonds','Snack',1,'v q',[['gyog',200],['almond',20]],['Top the yogurt with the almonds.'],'Cinnamon']
 ];
+var TAGN={v:'Vegetarian',q:'15 min',mp:'Meal prep',b:'Budget'};
+function macros(items,k){k=k||1;var t={kcal:0,p:0,c:0,f:0};items.forEach(function(x){var i=ING[x[0]],g=x[1]*k/100;t.kcal+=i[1]*g;t.p+=i[2]*g;t.c+=i[3]*g;t.f+=i[4]*g});return{kcal:Math.round(t.kcal),p:Math.round(t.p),c:Math.round(t.c),f:Math.round(t.f)}}
+var MEALS=RECIPES.map(function(r,i){var m=macros(r[4]);return{id:i,n:r[0],cat:r[1],min:r[2],tags:r[3]?r[3].split(' '):[],ing:r[4],steps:r[5],pantry:r[6],m:m}});
+function fmtG(key,g){var i=ING[key];g=Math.round(g/5)*5||Math.round(g);var s=g>=1000?(g/1000).toFixed(g%1000?2:0).replace(/\.?0+$/,'')+' kg':g+' g';if(i[6]){var n=g/i[6];var r=Math.round(n*2)/2;if(r>=0.5)s+=' · '+(r%1?r:r)+' '+i[7]+(r>1?'s':'')}return s}
+
 var ARTS=[
  ['Progressive overload, simply','Training',"<p>Your body adapts to what you ask of it. To keep progressing, ask a little more over time: one more rep, a little more weight, better form, or less rest.</p><h3>How this app does it</h3><p>Every exercise has a rep range, like 8–12. When you hit the top of the range on all sets, the app raises the weight next time. If you fall short of the bottom, it keeps or lowers it. You just log honestly.</p>"],
  ['Consistency beats intensity','Mindset',"<p>A plan you follow at 80% for a year beats a perfect plan you quit after three weeks.</p><h3>Make it easy to show up</h3><p>Same days, same time. Clothes ready the night before. On bad days, do the warm-up and the first exercise. Most days that's enough to finish.</p>"],
@@ -374,15 +508,84 @@ function checkin(){var from=new Date();from.setDate(from.getDate()-7);var L=S.lo
 
 /* =================== FUEL =================== */
 function targets(){var p=S.profile,bmr=10*p.wt+6.25*p.ht-5*p.age+(p.sex==='m'?5:-161),tdee=bmr*(p.act||1.5)+p.days*40;var adj={lose:-0.15,muscle:0.08,strength:0.05,fit:0}[p.goal]||0;var kcal=tdee*(1+adj);var floor=Math.max(bmr*1.1,p.sex==='m'?1600:1300);if(kcal<floor)kcal=floor;return{kcal:Math.round(kcal/10)*10,p:Math.round(p.wt*1.8),tdee:Math.round(tdee/10)*10}}
-function fuel(){var t=targets(),g=S.profile.goal;
- app.innerHTML=top('Fuel')+'<h1 class="d">Eat for the goal.</h1><p class="muted" style="margin-bottom:14px">Estimated daily targets based on your body, activity and goal. Use them as a starting point, not a rule.</p>'+
+var SLOTS=[['Breakfast',.25],['Lunch',.32],['Dinner',.33],['Snack',.10]];
+var fuelTab='plan',planDay=0,rcat='All',rflt={},rq='';
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function fitK(m,slot){var sh=SLOTS.filter(function(s){return s[0]===slot})[0];var t=targets().kcal*(sh?sh[1]:.3);return Math.round(clamp(t/m.m.kcal,.6,1.8)*20)/20}
+function pickMeal(cat,avoid){var veg=S.mpVeg,favs=S.favs||[];var pool=MEALS.filter(function(m){return m.cat===cat&&(!veg||m.tags.indexOf('v')>-1)});var fresh=pool.filter(function(m){return avoid.indexOf(m.id)<0});if(fresh.length)pool=fresh;
+ var w=pool.map(function(m){var d=m.m.p*4/m.m.kcal;return d*d*(favs.indexOf(m.id)>-1?1.8:1)}),sum=w.reduce(function(a,b){return a+b},0),r=Math.random()*sum;for(var i=0;i<pool.length;i++){r-=w[i];if(r<=0)return pool[i]}return pool[pool.length-1]}
+function newPlan(){var days=[],recent=[];for(var d=0;d<7;d++){var day=SLOTS.map(function(s){var m=pickMeal(s[0],recent);return{id:m.id,k:fitK(m,s[0])}});days.push(day);recent=recent.concat(day.map(function(x){return x.id})).slice(-8)}S.mp={start:dayKey(),days:days};S.groc={};save()}
+function planDayIndex(){if(!S.mp)return 0;var d=Math.floor((new Date(dayKey())-new Date(S.mp.start))/864e5);return clamp(d,0,6)}
+function dayTotals(day){var t={kcal:0,p:0,c:0,f:0};day.forEach(function(x){var m=macros(MEALS[x.id].ing,x.k);t.kcal+=m.kcal;t.p+=m.p;t.c+=m.c;t.f+=m.f});return t}
+function bar(v,t){return '<div class="progress" style="margin:6px 0 0"><i style="width:'+clamp(v/t*100,0,100)+'%"></i></div>'}
+function mbar(m){var p=m.p*4,c=m.c*4,f=m.f*9,s=p+c+f||1;return '<div class="mbar"><i style="width:'+p/s*100+'%;background:var(--acc)"></i><i style="width:'+c/s*100+'%;background:#7d93b8"></i><i style="width:'+f/s*100+'%;background:#b98a8a"></i></div><div class="mleg"><span><b style="background:var(--acc)"></b>Protein '+Math.round(p/s*100)+'%</span><span><b style="background:#7d93b8"></b>Carbs '+Math.round(c/s*100)+'%</span><span><b style="background:#b98a8a"></b>Fat '+Math.round(f/s*100)+'%</span></div>'}
+
+function fuel(){var t=targets(),g=S.profile.goal;if(!S.favs)S.favs=[];if(!S.groc)S.groc={};
+ app.innerHTML=top('Fuel')+'<h1 class="d">Eat for the goal.</h1><p class="muted" style="margin-bottom:14px">Daily targets estimated from your body, activity and goal, with a meal plan built around them.</p>'+
  '<div class="grid2"><div class="stat"><b>'+t.kcal+'</b><span>kcal / day</span></div><div class="stat"><b>'+t.p+' g</b><span>Protein / day</span></div></div>'+
- '<div class="card" style="margin-top:14px"><h3>How to use this</h3><ul class="muted" style="padding-left:18px;margin-top:8px;display:grid;gap:6px;font-size:.9rem"><li>Hit protein most days; it matters most.</li><li>'+(g==='lose'?'Aim to lose about 0.5% of bodyweight per week. Faster usually costs muscle and energy.':g==='muscle'?'Aim to gain about 0.25–0.5% of bodyweight per month.':'Keep bodyweight roughly stable while performance improves.')+'</li><li>Check the weekly trend, not daily numbers, and adjust by ~150 kcal if it stalls for 3 weeks.</li></ul>'+
- '<p class="note">General information, not medical or dietetic advice. If you have a medical condition, are pregnant, or have a history of disordered eating, please work with a doctor or registered dietitian instead of using calorie targets.</p></div>'+
- '<h2 class="d" style="margin-top:22px">Meal ideas</h2><p class="dim" style="font-size:.8rem;margin-bottom:10px">Approximate values per serving.</p><div class="seg" id="mf" style="margin-bottom:12px">'+['All','Breakfast','Lunch','Dinner','Snack'].map(function(c,i){return '<button data-c="'+c+'" aria-pressed="'+(i===0)+'">'+c+'</button>'}).join('')+'</div><div class="list" id="meals"></div>';
- var draw=function(c){$('#meals').innerHTML=MEALS.filter(function(m){return c==='All'||m[1]===c}).map(function(m){return '<div class="item" style="cursor:default"><span>'+esc(m[0])+'<small>'+esc(m[2])+'</small></span><span style="text-align:right;font-size:.82rem"><b>'+m[4]+'g</b> protein<br><span class="dim">~'+m[3]+' kcal</span></span></div>'}).join('')};draw('All');
- document.querySelectorAll('#mf button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#mf button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});draw(b.dataset.c)}});
-}
+ '<details class="card" style="margin-top:14px"><summary style="cursor:pointer;font-weight:700">How to use your targets</summary><ul class="muted" style="padding-left:18px;margin-top:10px;display:grid;gap:6px;font-size:.9rem"><li>Hit protein most days; it matters most.</li><li>'+(g==='lose'?'Aim to lose about 0.5% of bodyweight per week. Faster usually costs muscle and energy.':g==='muscle'?'Aim to gain about 0.25–0.5% of bodyweight per month.':'Keep bodyweight roughly stable while performance improves.')+'</li><li>Check the weekly trend, not daily numbers, and adjust by ~150 kcal if it stalls for 3 weeks.</li></ul>'+
+ '<p class="note">General information, not medical or dietetic advice. If you have a medical condition or food allergy, are pregnant, or have a history of disordered eating, please work with a doctor or registered dietitian instead of using calorie targets. Always check ingredient labels for allergens.</p></details>'+
+ '<div class="seg" id="ft" style="margin:18px 0 14px">'+[['plan','Meal plan'],['recipes','Recipes'],['groc','Groceries']].map(function(x){return '<button data-t="'+x[0]+'" aria-pressed="'+(fuelTab===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div id="fv"></div>';
+ document.querySelectorAll('#ft button').forEach(function(b){b.onclick=function(){fuelTab=b.dataset.t;fuel()}});
+ ({plan:planView,recipes:recipeView,groc:grocView})[fuelTab]()}
+
+function planView(){var t=targets(),v=$('#fv');
+ if(!S.mp){v.innerHTML='<div class="card hero"><p class="ey">7-day meal plan</p><h2 class="d" style="margin:.5rem 0">A week of meals, sized to you.</h2><p class="muted" style="margin-bottom:14px">Breakfast, lunch, dinner and a snack for 7 days, with portions scaled to your '+t.kcal+' kcal target and built around protein. Plus a ready-made grocery list.</p><label class="row" style="gap:10px;margin-bottom:14px;cursor:pointer"><input type="checkbox" id="vg" '+(S.mpVeg?'checked':'')+' style="width:20px;height:20px;accent-color:var(--acc)"> <span>Vegetarian meals only</span></label><button class="btn p" id="gp">Build my week</button></div>';
+  $('#vg').onchange=function(){S.mpVeg=this.checked;save()};$('#gp').onclick=function(){newPlan();planDay=planDayIndex();toast('Your week is ready');fuel()};return}
+ var st=new Date(S.mp.start),day=S.mp.days[planDay],tot=dayTotals(day);
+ var chips='<div class="dayrow">'+S.mp.days.map(function(_,i){var d=new Date(st);d.setDate(d.getDate()+i);return '<button data-d="'+i+'" aria-pressed="'+(i===planDay)+'"><small>'+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+'</small>'+d.getDate()+'</button>'}).join('')+'</div>';
+ var low=tot.p<t.p*.9;
+ v.innerHTML=chips+'<div class="card"><div class="grid2"><div><span class="dim" style="font-size:.75rem">CALORIES</span><div><b style="font-size:1.25rem">'+tot.kcal+'</b> <span class="dim">/ '+t.kcal+'</span></div>'+bar(tot.kcal,t.kcal)+'</div><div><span class="dim" style="font-size:.75rem">PROTEIN</span><div><b style="font-size:1.25rem">'+tot.p+' g</b> <span class="dim">/ '+t.p+' g min</span></div>'+bar(tot.p,t.p)+'</div></div>'+mbar(tot)+(low?'<div class="hint" style="margin:12px 0 0">Protein is a little under target today. A protein shake or a pot of Greek yogurt closes the gap.</div>':'')+'</div>'+
+ '<div class="list">'+day.map(function(x,i){var m=MEALS[x.id],mm=macros(m.ing,x.k);return '<button class="item" data-i="'+i+'"><span><span class="ey" style="font-size:.6rem">'+SLOTS[i][0]+'</span><br>'+esc(m.n)+'<small>'+m.min+' min'+(x.k!==1?' · portion ×'+x.k:'')+(S.favs.indexOf(m.id)>-1?' · ★':'')+'</small></span><span style="text-align:right;font-size:.82rem"><b>'+mm.p+' g</b> protein<br><span class="dim">'+mm.kcal+' kcal</span></span></button>'}).join('')+'</div>'+
+ '<div class="grid2" style="margin-top:14px"><button class="btn g sm" id="np" style="width:100%">New week</button><button class="btn g sm" id="gl" style="width:100%">Grocery list</button></div><p class="note">Tap a meal for the recipe, exact amounts or to swap it. Portions are scaled to your targets; values are approximate.</p>';
+ v.querySelectorAll('[data-d]').forEach(function(b){b.onclick=function(){planDay=+b.dataset.d;planView()}});
+ v.querySelectorAll('[data-i]').forEach(function(b){b.onclick=function(){var i=+b.dataset.i,x=day[i];recipeSheet(x.id,x.k,{d:planDay,i:i})}});
+ $('#np').onclick=function(){if(confirmNew()){newPlan();planDay=planDayIndex();toast('New week planned');fuel()}};
+ $('#gl').onclick=function(){fuelTab='groc';fuel()}}
+function confirmNew(){return Object.keys(S.groc||{}).length===0||window.confirm('Start a new week? Your grocery ticks will reset.')}
+
+function recipeSheet(id,k,slot){var m=MEALS[id],fav=S.favs.indexOf(id)>-1;k=k||1;
+ var draw=function(){var mm=macros(m.ing,k);
+  sheet('<p class="ey">'+m.cat+' · '+m.min+' min</p><h2 class="d" style="margin:.5rem 0 .6rem">'+esc(m.n)+'</h2><div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:14px">'+m.tags.map(function(x){return '<span class="tag a">'+TAGN[x]+'</span>'}).join('')+'</div>'+
+  '<div class="mstats"><div><b>'+mm.kcal+'</b><span>kcal</span></div><div><b>'+mm.p+'g</b><span>protein</span></div><div><b>'+mm.c+'g</b><span>carbs</span></div><div><b>'+mm.f+'g</b><span>fat</span></div></div>'+mbar(mm)+
+  '<div class="row" style="justify-content:space-between;margin:16px 0 8px"><h3>Ingredients</h3><div class="row" style="gap:6px"><button class="chipbtn" id="km" aria-label="Smaller portion">−</button><span style="min-width:62px;text-align:center;font-weight:700">×'+k+'</span><button class="chipbtn" id="kp" aria-label="Bigger portion">+</button></div></div>'+
+  '<div class="list">'+m.ing.map(function(x){return '<div class="item" style="cursor:default;padding:10px 14px"><span>'+esc(ING[x[0]][0])+'</span><span class="muted" style="font-size:.85rem;text-align:right">'+fmtG(x[0],x[1]*k)+'</span></div>'}).join('')+'</div>'+
+  (m.pantry?'<p class="dim" style="font-size:.8rem;margin-top:8px">Plus: '+esc(m.pantry)+'</p>':'')+
+  '<h3 style="margin:18px 0 8px">Method</h3><ol class="steps">'+m.steps.map(function(s){return '<li>'+esc(s)+'</li>'}).join('')+'</ol>'+
+  '<div class="grid2" style="margin-top:18px">'+(slot?'<button class="btn g sm" id="sw" style="width:100%">Swap meal</button>':'<button class="btn g sm" id="fit" style="width:100%">Fit to my targets</button>')+'<button class="btn g sm" id="fv2" style="width:100%">'+(fav?'★ Saved':'☆ Save')+'</button></div><button class="btn p" id="cl" style="margin-top:10px">Close</button>');
+  $('#km').onclick=function(){k=Math.max(.5,Math.round((k-.25)*100)/100);upd();draw()};$('#kp').onclick=function(){k=Math.min(3,Math.round((k+.25)*100)/100);upd();draw()};
+  $('#fv2').onclick=function(){var i=S.favs.indexOf(id);if(i>-1)S.favs.splice(i,1);else S.favs.push(id);fav=i<0;save();toast(fav?'Saved to favourites':'Removed from favourites');draw()};
+  if($('#fit'))$('#fit').onclick=function(){k=fitK(m,m.cat);draw()};
+  if($('#sw'))$('#sw').onclick=function(){var d=S.mp.days[slot.d],avoid=d.map(function(x){return x.id});var n=pickMeal(m.cat,avoid);d[slot.i]={id:n.id,k:fitK(n,m.cat)};save();closeSheet();toast('Swapped for '+n.n);fuel()};
+  $('#cl').onclick=function(){closeSheet();if(slot)fuel()}};
+ var upd=function(){if(slot){S.mp.days[slot.d][slot.i].k=k;save()}};
+ draw()}
+
+function recipeView(){var v=$('#fv');
+ v.innerHTML='<input class="in" id="rq" type="search" placeholder="Search '+MEALS.length+' recipes or ingredients" value="'+esc(rq)+'" style="margin-bottom:10px">'+
+ '<div class="seg" id="rc" style="margin-bottom:10px">'+['All','Breakfast','Lunch','Dinner','Snack'].map(function(c){return '<button data-c="'+c+'" aria-pressed="'+(rcat===c)+'">'+c+'</button>'}).join('')+'</div>'+
+ '<div class="row" id="rf" style="gap:6px;flex-wrap:wrap;margin-bottom:12px">'+[['fav','★ Saved'],['v','Vegetarian'],['q','15 min'],['mp','Meal prep'],['b','Budget'],['hp','High protein']].map(function(x){return '<button class="chipbtn" data-f="'+x[0]+'" aria-pressed="'+!!rflt[x[0]]+'"'+(rflt[x[0]]?' style="border-color:var(--acc);color:var(--acc)"':'')+'>'+x[1]+'</button>'}).join('')+'</div><div class="list" id="rl"></div>';
+ var list=function(){var q=rq.trim().toLowerCase();var L=MEALS.filter(function(m){if(rcat!=='All'&&m.cat!==rcat)return false;for(var f in rflt){if(!rflt[f])continue;if(f==='fav'&&S.favs.indexOf(m.id)<0)return false;if(f==='hp'&&m.m.p*4/m.m.kcal<.3)return false;if(f!=='fav'&&f!=='hp'&&m.tags.indexOf(f)<0)return false}if(q&&(m.n+' '+m.ing.map(function(x){return ING[x[0]][0]}).join(' ')).toLowerCase().indexOf(q)<0)return false;return true});
+  $('#rl').innerHTML=L.length?L.map(function(m){return '<button class="item" data-r="'+m.id+'"><span>'+esc(m.n)+(S.favs.indexOf(m.id)>-1?' <span class="acc">★</span>':'')+'<small>'+m.cat+' · '+m.min+' min'+(m.tags.length?' · '+m.tags.map(function(x){return TAGN[x]}).join(', '):'')+'</small></span><span style="text-align:right;font-size:.82rem;white-space:nowrap"><b>'+m.m.p+' g</b> protein<br><span class="dim">'+m.m.kcal+' kcal</span></span></button>'}).join(''):'<p class="muted" style="padding:20px 0;text-align:center">No recipes match. Try fewer filters.</p>';
+  $('#rl').querySelectorAll('[data-r]').forEach(function(b){b.onclick=function(){recipeSheet(+b.dataset.r,1)}})};
+ list();
+ $('#rq').oninput=function(){rq=this.value;list()};
+ v.querySelectorAll('#rc button').forEach(function(b){b.onclick=function(){rcat=b.dataset.c;recipeView()}});
+ v.querySelectorAll('#rf button').forEach(function(b){b.onclick=function(){rflt[b.dataset.f]=!rflt[b.dataset.f];recipeView()}})}
+
+function grocList(){var agg={},pan={};S.mp.days.forEach(function(d){d.forEach(function(x){var m=MEALS[x.id];m.ing.forEach(function(i){agg[i[0]]=(agg[i[0]]||0)+i[1]*x.k});if(m.pantry)m.pantry.split(',').forEach(function(p){p=p.trim().replace(/\s*\(.*\)/,'');if(p)pan[p.charAt(0).toUpperCase()+p.slice(1)]=1})})});
+ var by={};Object.keys(agg).forEach(function(k){var a=ING[k][5];(by[a]=by[a]||[]).push(k)});return{agg:agg,by:by,pan:Object.keys(pan).sort()}}
+var AISLES=['Meat & fish','Dairy & eggs','Fruit & veg','Grains & bread','Cans & pantry','Nuts, seeds & extras'];
+function grocView(){var v=$('#fv');if(!S.mp){v.innerHTML='<div class="card"><p class="muted" style="margin-bottom:12px">Build your 7-day meal plan first and your grocery list appears here automatically.</p><button class="btn p" id="gp">Build my week</button></div>';$('#gp').onclick=function(){fuelTab='plan';fuel()};return}
+ var G=grocList(),n=Object.keys(G.agg).length,done=Object.keys(G.agg).filter(function(k){return S.groc[k]}).length;
+ v.innerHTML='<div class="card"><div class="row" style="justify-content:space-between"><div><b>'+done+' of '+n+'</b> <span class="dim">items</span></div><span class="tag">7 days</span></div>'+bar(done,n)+'</div>'+
+ AISLES.filter(function(a){return G.by[a]}).map(function(a){return '<h3 style="margin:16px 0 8px" class="ey">'+a+'</h3><div class="list">'+G.by[a].map(function(k){var on=!!S.groc[k];return '<button class="item ck" data-k="'+k+'" aria-pressed="'+on+'"><span class="row" style="gap:12px"><span class="box">'+(on?'✓':'')+'</span><span'+(on?' style="text-decoration:line-through;color:var(--dim)"':'')+'>'+esc(ING[k][0])+'</span></span><span class="muted" style="font-size:.85rem;text-align:right">'+fmtG(k,G.agg[k])+'</span></button>'}).join('')+'</div>'}).join('')+
+ (G.pan.length?'<h3 style="margin:16px 0 8px" class="ey">Spices & basics</h3><p class="muted" style="font-size:.88rem">'+esc(G.pan.join(', '))+'</p>':'')+
+ '<div class="grid2" style="margin-top:16px"><button class="btn g sm" id="sh" style="width:100%">Share list</button><button class="btn g sm" id="cr" style="width:100%">Clear ticks</button></div><p class="note">Amounts are totals for the week, rounded. Buy the nearest pack size; leftovers keep for next week.</p>';
+ v.querySelectorAll('[data-k]').forEach(function(b){b.onclick=function(){var k=b.dataset.k;if(S.groc[k])delete S.groc[k];else S.groc[k]=1;save();grocView()}});
+ $('#cr').onclick=function(){S.groc={};save();grocView()};
+ $('#sh').onclick=function(){var txt='BECOMING YOU ✦ FITNESS · grocery list\n'+AISLES.filter(function(a){return G.by[a]}).map(function(a){return '\n'+a.toUpperCase()+'\n'+G.by[a].map(function(k){return (S.groc[k]?'✓ ':'• ')+ING[k][0]+' — '+fmtG(k,G.agg[k])}).join('\n')}).join('\n')+(G.pan.length?'\n\nSPICES & BASICS\n'+G.pan.join(', '):'');
+  if(navigator.share)navigator.share({title:'Grocery list',text:txt}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(function(){toast('List copied')},function(){toast('Could not copy')});else toast('Sharing not supported')}}
 
 /* =================== LEARN =================== */
 function learn(){app.innerHTML=top('Learn')+'<h1 class="d">Know why, not just what.</h1><p class="muted" style="margin-bottom:14px">Short guides. Two minutes each.</p><div class="list">'+ARTS.map(function(a,i){return '<button class="item" data-a="'+i+'"><span>'+esc(a[0])+'<small>2 min read</small></span><span class="tag">'+a[1]+'</span></button>'}).join('')+'</div>';
