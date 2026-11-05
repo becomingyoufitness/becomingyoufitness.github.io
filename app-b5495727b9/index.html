@@ -12,10 +12,9 @@
 <meta name="apple-mobile-web-app-title" content="BECOMING YOU">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/archivo.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="fonts/inter-Regular.woff" as="font" type="font/woff" crossorigin>
 <style>
+@font-face{font-family:Archivo;src:url(fonts/archivo.woff) format('woff');font-weight:600 900;font-stretch:62% 80%;font-display:swap}@font-face{font-family:Inter;src:url(fonts/inter-Regular.woff) format('woff');font-weight:400;font-display:swap}@font-face{font-family:Inter;src:url(fonts/inter-Medium.woff) format('woff');font-weight:500;font-display:swap}@font-face{font-family:Inter;src:url(fonts/inter-SemiBold.woff) format('woff');font-weight:600;font-display:swap}@font-face{font-family:Inter;src:url(fonts/inter-Bold.woff) format('woff');font-weight:700;font-display:swap}
 :root{--bg:#0b0b0c;--bg2:#141416;--bg3:#1d1d20;--line:#2a2a2e;--text:#f2efe9;--muted:#a8a29a;--dim:#76716b;--acc:#c9a87a;--acc2:#e3c79c;--ink:#16120c;--ok:#8fb894;--warn:#e0b26a;--err:#e08a7a;--r:14px;
 --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -168,12 +167,12 @@ var EX={
  curl:{n:'Dumbbell curl',s:'arms',e:['db','gym'],m:'Biceps',t:'w',up:1,c:['Elbows pinned to your sides','No swinging','Lower slowly']},
  pushdown:{n:'Cable triceps pushdown',s:'arms',e:['gym'],m:'Triceps',t:'w',up:1,c:['Elbows by your sides','Full lockout','Control the return']},
  dips:{n:'Bench dips',s:'arms',e:['bw','db'],m:'Triceps',t:'b',up:1,c:['Hands on a bench behind you','Shoulders down, away from ears','Lower to about 90° elbows']},
- latraise:{n:'Lateral raise',s:'delts',e:['db','gym'],m:'Side delts',t:'w',up:1,c:['Light weight, slight bend in elbows','Lead with the elbows','Stop at shoulder height']},
+ latraise:{n:'Lateral raise',s:'delts',e:['db','gym'],m:'Side delts',t:'w',up:1,c:['Light weight, slight bend in elbows','Lead with the elbows','Stop at shoulder height']},ytw:{n:'Prone Y-T-W raise',s:'delts',e:['bw'],m:'Rear & side delts, upper back',t:'b',up:1,c:['Lie face down, arms long, thumbs up','Lift arms into a Y, then T, then W shape','Squeeze shoulder blades, slow and controlled']},
  plank:{n:'Plank',s:'core',e:['bw','db','gym'],m:'Core',t:'t',up:1,c:['Forearms under shoulders','Squeeze glutes, ribs down','Quality over time']},
  deadbug:{n:'Dead bug',s:'core',e:['bw','db','gym'],m:'Core',t:'b',up:1,c:['Lower back gently pressed down','Move opposite arm and leg slowly','Breathe out as you extend']},
  calf:{n:'Standing calf raise',s:'calf',e:['bw','db','gym'],m:'Calves',t:'b',up:0,c:['Full stretch at the bottom','Pause at the top','Slow and controlled']}
 };
-var POOL={squat:['squat','legpress','gobletsq','bwsquat'],hinge:['rdl','hipthrust','dbrdl','bridge'],hpush:['bench','dbbench','pushup'],vpush:['ohp','dbohp','pike'],hpull:['row','dbrow','invrow'],vpull:['pulldown','pullover','superman'],lunge:['splitsq','lunge'],arms:['curl','pushdown','dips'],delts:['latraise'],core:['deadbug','plank'],calf:['calf']};
+var POOL={squat:['squat','legpress','gobletsq','bwsquat'],hinge:['rdl','hipthrust','dbrdl','bridge'],hpush:['bench','dbbench','pushup'],vpush:['ohp','dbohp','pike'],hpull:['row','dbrow','invrow'],vpull:['pulldown','pullover','superman'],lunge:['splitsq','lunge'],arms:['curl','pushdown','dips'],delts:['latraise','ytw'],core:['deadbug','plank'],calf:['calf']};
 var DAYS={
  2:[['Full body A',['squat','hpush','hpull','hinge','core']],['Full body B',['hinge','vpush','vpull','lunge','core']]],
  3:[['Full body A',['squat','hpush','hpull','core']],['Full body B',['hinge','vpush','vpull','lunge']],['Full body C',['lunge','hpush','hpull','arms','core']]],
@@ -329,6 +328,11 @@ function loadLocal(){try{var v=localStorage.getItem(KEY);return v?JSON.parse(v):
 function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){mem=S}}
 function save(){saveLocal();if(!docRef)return;clearTimeout(saveT);saveT=setTimeout(function(){docRef.set(JSON.parse(JSON.stringify(S))).catch(function(){})},1200)}
 S=loadLocal()||blank();
+function heal(){var b=blank();for(var k in b){if(S[k]==null||typeof S[k]!==typeof b[k])S[k]=b[k]}if(!Array.isArray(S.logs))S.logs=[];if(!Array.isArray(S.weights))S.weights=[];if(!Array.isArray(S.checkins))S.checkins=[];
+ if(S.cur&&(!S.cur.ex||S.cur.ex.some(function(e){return !e||!EX[e.id]})))S.cur=null;
+ if(S.mp&&(!S.mp.days||S.mp.days.length!==7||S.mp.days.some(function(d){return !d||d.some(function(x){return !x||!MEALS[x.id]})})))S.mp=null;
+ if(S.favs)S.favs=S.favs.filter(function(i){return MEALS[i]});if(S.profile&&(!DAYS[S.profile.days]))S.profile.days=3}
+try{heal()}catch(e){S=blank()}
 (function(){if(!window.claude||!window.claude.use)return;Promise.all([claude.use('db'),claude.use('user')]).then(function(a){db=a[0];var u=a[1];if(!db||!u)return;return u.id().then(function(id){if(!id)return;docRef=db.collection('data/users/'+id).doc('app');return docRef.get().then(function(sn){if(sn.exists){var r=sn.data();if(r&&(!S.profile||(r.logs||[]).length>=(S.logs||[]).length)){S=Object.assign(blank(),JSON.parse(JSON.stringify(r)));saveLocal();render()}}else if(S.profile){docRef.set(JSON.parse(JSON.stringify(S))).catch(function(){})}})})}).catch(function(){})})();
 
 /* =================== HELPERS =================== */
@@ -340,7 +344,7 @@ function kg2u(v){return S.unit==='lb'?Math.round(v*2.20462*2)/2:Math.round(v*2)/
 function u2kg(v){return S.unit==='lb'?v/2.20462:v}
 function wk(){var p=S.profile;if(!p)return 1;return Math.floor((Date.now()-p.start)/(7*864e5))+1}
 function isDeload(){return wk()%6===0}
-function pick(slot,equip,i){var opts=POOL[slot].filter(function(id){return EX[id].e.indexOf(equip)>-1});if(!opts.length)opts=POOL[slot].filter(function(id){return EX[id].e.indexOf('bw')>-1});return opts[i%opts.length]}
+function pick(slot,equip,i){var pool=(POOL[slot]||[]).filter(function(id){return EX[id]});var opts=pool.filter(function(id){return EX[id].e.indexOf(equip)>-1});if(!opts.length)opts=pool.filter(function(id){return EX[id].e.indexOf('bw')>-1});if(!opts.length)opts=pool;if(!opts.length)opts=Object.keys(EX).filter(function(id){return EX[id].e.indexOf(equip)>-1});return opts[i%opts.length]}
 function scheme(id){var p=S.profile,x=EX[id],big=['squat','hinge','hpush','vpush','hpull','vpull'].indexOf(x.s)>-1;
  var sets=p.level==='new'?(big?3:2):(big?4:3);if(isDeload())sets=Math.max(2,sets-1);
  if(x.t==='t')return{sets:sets,lo:20,hi:45,unit:'s',rest:60};
@@ -366,7 +370,8 @@ function suggestion(id){var x=EX[id],sc=scheme(id),L=S.last[id];
 var tab='today';
 function go(t){tab=t;render();window.scrollTo(0,0)}
 document.querySelectorAll('nav.tabs button').forEach(function(b){b.onclick=function(){go(b.dataset.t)}});
-function render(){
+function render(){try{_render()}catch(e){try{heal();_render()}catch(e2){app.innerHTML='<div class="card" style="margin-top:40px"><h2 class="d">Something went wrong.</h2><p class="muted" style="margin:10px 0 16px">Your data is safe. Tap below to reload this page.</p><button class="btn p" onclick="location.reload()">Reload</button><button class="btn g" style="margin-top:10px" onclick="tab=\'today\';S.cur=null;save();location.reload()">Back to Today</button></div>';$('#tabs').hidden=false}}}
+function _render(){
  if(!S.profile){$('#tabs').hidden=true;return onboarding()}
  if(S.cur){$('#tabs').hidden=true;return workout()}
  $('#tabs').hidden=false;
