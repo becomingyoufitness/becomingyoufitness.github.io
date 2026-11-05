@@ -18,6 +18,10 @@
 :root{--bg:#0b0b0c;--bg2:#141416;--bg3:#1d1d20;--line:#2a2a2e;--text:#f2efe9;--muted:#a8a29a;--dim:#76716b;--acc:#c9a87a;--acc2:#e3c79c;--ink:#16120c;--ok:#8fb894;--warn:#e0b26a;--err:#e08a7a;--r:14px;
 --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+button,a,input,select,label{touch-action:manipulation}
+.card,.set,.row{contain:layout style}
+.chk,.btn,nav.tabs button{transition:background-color .12s,transform .08s}.chk:active,.btn:active,nav.tabs button:active{transform:scale(.96)}
+.timer{will-change:transform}
 html,body{background:var(--bg);color:var(--text);font:400 15px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
@@ -54,7 +58,7 @@ h3{font-size:1rem;font-weight:700}
 .tag{font:600 .64rem/1 Inter;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .5rem;border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .tag.a{color:var(--acc);border-color:rgba(201,168,122,.45)}
 .tag.ok{color:var(--ok);border-color:rgba(143,184,148,.45)}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(11,11,12,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:8px 8px calc(8px + var(--safe-b));z-index:20}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(11,11,12,.97);border-top:1px solid var(--line);padding:8px 8px calc(8px + var(--safe-b));z-index:20}
 nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
 nav.tabs button{background:none;border:0;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.66rem;font-weight:600;letter-spacing:.04em;padding:6px 0;cursor:pointer}
 nav.tabs button svg{width:22px;height:22px}
@@ -326,7 +330,9 @@ var KEY='by-fitness-v1',S=null,db=null,docRef=null,saveT=null,mem=null;
 function blank(){return {profile:null,unit:'kg',logs:[],last:{},habits:{},weights:[],checkins:[],cur:null,created:Date.now()}}
 function loadLocal(){try{var v=localStorage.getItem(KEY);return v?JSON.parse(v):null}catch(e){return mem}}
 function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){mem=S}}
-function save(){saveLocal();if(!docRef)return;clearTimeout(saveT);saveT=setTimeout(function(){docRef.set(JSON.parse(JSON.stringify(S))).catch(function(){})},1200)}
+var lsT=null,lsDirty=false;function flush(){if(!lsDirty)return;lsDirty=false;clearTimeout(lsT);saveLocal()}
+window.addEventListener('pagehide',flush);document.addEventListener('visibilitychange',function(){if(document.hidden)flush()});
+function save(now){lsDirty=true;clearTimeout(lsT);if(now===true)flush();else lsT=setTimeout(flush,350);if(!docRef)return;clearTimeout(saveT);saveT=setTimeout(function(){docRef.set(JSON.parse(JSON.stringify(S))).catch(function(){})},1200)}
 S=loadLocal()||blank();
 function heal(){var b=blank();for(var k in b){if(S[k]==null||typeof S[k]!==typeof b[k])S[k]=b[k]}if(!Array.isArray(S.logs))S.logs=[];if(!Array.isArray(S.weights))S.weights=[];if(!Array.isArray(S.checkins))S.checkins=[];
  if(S.cur&&(!S.cur.ex||S.cur.ex.some(function(e){return !e||!EX[e.id]})))S.cur=null;
@@ -448,7 +454,7 @@ function workout(){
  app.innerHTML=h;
  var tick=function(){var e=$('#clock');if(!e||!S.cur)return;var m=Math.floor((Date.now()-S.cur.t0)/60000);e.textContent=m+' min'};tick();clearInterval(window.__ck);window.__ck=setInterval(tick,30000);
  app.querySelectorAll('.set input').forEach(function(i){i.oninput=function(){var s=S.cur.ex[+i.dataset.e].sets[+i.dataset.s];var v=i.value===''?null:+i.value;if(i.dataset.k==='w')s.w=v==null?null:u2kg(v);else s.r=v;save()}});
- app.querySelectorAll('.chk').forEach(function(b){b.onclick=function(){var e=S.cur.ex[+b.dataset.e],s=e.sets[+b.dataset.s];if(!s.ok&&s.r==null){var sg=suggestion(e.id);s.r=sg.r;}if(!s.ok&&EX[e.id].t==='w'&&!s.w){toast('Enter the weight first');return}s.ok=!s.ok;save();if(s.ok)rest(scheme(e.id).rest);workout()}});
+ app.querySelectorAll('.chk').forEach(function(b){b.onclick=function(){var e=S.cur.ex[+b.dataset.e],s=e.sets[+b.dataset.s];if(!s.ok&&s.r==null){var sg=suggestion(e.id);s.r=sg.r;}if(!s.ok&&EX[e.id].t==='w'&&!s.w){toast('Enter the weight first');return}s.ok=!s.ok;save(true);b.setAttribute('aria-pressed',s.ok);var ri=b.parentNode.querySelector('input[data-k=r]');if(ri&&s.r!=null)ri.value=s.r;if(s.ok)rest(scheme(e.id).rest)}});
  app.querySelectorAll('[data-info]').forEach(function(b){b.onclick=function(){exInfo(b.dataset.info)}});
  $('#quit').onclick=function(){sheet('<h2 class="d">End workout?</h2><p class="muted" style="margin-bottom:16px">Completed sets will be saved. Unfinished sets won\'t count.</p><button class="btn p" id="sv">Save what I did</button><button class="btn g" id="ds" style="margin-top:8px">Discard workout</button><button class="btn g" id="cn" style="margin-top:8px">Keep going</button>');$('#sv').onclick=function(){closeSheet();finish()};$('#ds').onclick=function(){closeSheet();S.cur=null;save();stopRest();render()};$('#cn').onclick=closeSheet};
  $('#finishw').onclick=finish;
